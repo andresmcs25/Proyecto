@@ -1,0 +1,106 @@
+// Paleta De Colores NeoPOS
+$neopos-dark-grey: #2c3e50;
+$neopos-mid-grey: #34495e;
+$neopos-accent-turquoise: #1ABC9C;
+$neopos-accent-turquoise-darker: #16A085;
+$neopos-light-grey-border: #bdc3c7;
+$neopos-very-light-grey-bg: #ecf0f1;
+$neopos-white: #FFFFFF;
+$neopos-text-dark: #2c3e50;
+$neopos-placeholder-text: #95a5a6;
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, $neopos-dark-grey 0%, $neopos-mid-grey 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.login-card {
+  background: $neopos-white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+  padding: 2.5rem;
+  max-width: 420px;
+  width: 100%;
+}
+
+.login-logo {
+  img {
+    width: 100px;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.login-title {
+  font-weight: 600;
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  color: $neopos-text-dark;
+  text-align: center;
+}
+
+.input-group {
+  border: 1px solid $neopos-light-grey-border;
+  border-radius: 0.5rem;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+
+  .form-control {
+    border: none;
+    box-shadow: none;
+    color: $neopos-text-dark;
+
+    &::placeholder {
+      color: $neopos-placeholder-text;
+      opacity: 1;
+    }
+
+    &:focus {
+      border-color: transparent;
+      box-shadow: none;
+    }
+  }
+
+  .input-group-text {
+    background-color: $neopos-very-light-grey-bg;
+    border: none;
+    color: $neopos-text-dark;
+    padding: 0.75rem 1rem;
+  }
+
+  &:focus-within {
+    border-color: $neopos-accent-turquoise;
+    box-shadow: 0 0 0 0.25rem rgba(red($neopos-accent-turquoise), green($neopos-accent-turquoise), blue($neopos-accent-turquoise), 0.25);
+  }
+}
+
+.btn-primary {
+  background-color: $neopos-accent-turquoise;
+  border-color: $neopos-accent-turquoise;
+  color: $neopos-white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+
+  &:hover {
+    background-color: $neopos-accent-turquoise-darker;
+    border-color: $neopos-accent-turquoise-darker;
+    color: $neopos-white;
+  }
+}
+
+.form-text {
+  a {
+    color: $neopos-accent-turquoise;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
