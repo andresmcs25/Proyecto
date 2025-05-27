@@ -1,0 +1,86 @@
+body {
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.login-card {
+  background: #FFFFFF;
+  border-radius: 1rem;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+  padding: 2.5rem;
+  max-width: 420px;
+  width: 100%;
+}
+
+.login-logo img {
+  width: 100px;
+  margin-bottom: 1.5rem;
+}
+
+.login-title {
+  font-weight: 600;
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.input-group {
+  border: 1px solid #bdc3c7;
+  border-radius: 0.5rem;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+}
+.input-group .form-control {
+  border: none;
+  box-shadow: none;
+  color: #2c3e50;
+}
+.input-group .form-control::placeholder {
+  color: #95a5a6;
+  opacity: 1;
+}
+.input-group .form-control:focus {
+  border-color: transparent;
+  box-shadow: none;
+}
+.input-group .input-group-text {
+  background-color: #ecf0f1;
+  border: none;
+  color: #2c3e50;
+  padding: 0.75rem 1rem;
+}
+.input-group:focus-within {
+  border-color: #1ABC9C;
+  box-shadow: 0 0 0 0.25rem rgba(26, 188, 156, 0.25);
+}
+
+.btn-primary {
+  background-color: #1ABC9C;
+  border-color: #1ABC9C;
+  color: #FFFFFF;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+.btn-primary:hover {
+  background-color: #16A085;
+  border-color: #16A085;
+  color: #FFFFFF;
+}
+
+.form-text a {
+  color: #1ABC9C;
+  text-decoration: none;
+}
+.form-text a:hover {
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=index.css.map */

@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model articulo {
+  idarticulo      Int               @id @default(autoincrement())
+  idcategoria     Int
+  codigo          String?           @db.VarChar(50)
+  nombre          String            @unique(map: "nombre_UNIQUE") @db.VarChar(100)
+  stock           Int
+  descripcion     String?           @db.VarChar(256)
+  imagen          String?           @db.VarChar(50)
+  condicion       Boolean           @default(true)
+  categoria       categoria         @relation(fields: [idcategoria], references: [idcategoria], onDelete: NoAction, onUpdate: NoAction, map: "fk_articulo_categoria")
+  detalle_ingreso detalle_ingreso[]
+  detalle_venta   detalle_venta[]
+
+  @@index([idcategoria], map: "fk_articulo_categoria_idx")
+}
+
+model categoria {
+  idcategoria Int        @id @default(autoincrement())
+  nombre      String     @unique(map: "nombre_UNIQUE") @db.VarChar(50)
+  descripcion String?    @db.VarChar(256)
+  condicion   Boolean    @default(true)
+  articulo    articulo[]
+}
+
+model detalle_ingreso {
+  iddetalle_ingreso Int      @id @default(autoincrement())
+  idingreso         Int
+  idarticulo        Int
+  cantidad          Int
+  precio_compra     Decimal  @db.Decimal(11, 2)
+  precio_venta      Decimal  @db.Decimal(11, 2)
+  articulo          articulo @relation(fields: [idarticulo], references: [idarticulo], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_ingreso_articulo")
+  ingreso           ingreso  @relation(fields: [idingreso], references: [idingreso], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_ingreso_ingreso")
+
+  @@index([idarticulo], map: "fk_detalle_ingreso_articulo_idx")
+  @@index([idingreso], map: "fk_detalle_ingreso_ingreso_idx")
+}
+
+model detalle_venta {
+  iddetalle_venta Int      @id @default(autoincrement())
+  idventa         Int
+  idarticulo      Int
+  cantidad        Int
+  precio_venta    Decimal  @db.Decimal(11, 2)
+  descuento       Decimal  @db.Decimal(11, 2)
+  articulo        articulo @relation(fields: [idarticulo], references: [idarticulo], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_venta_articulo")
+  venta           venta    @relation(fields: [idventa], references: [idventa], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_venta_venta")
+
+  @@index([idarticulo], map: "fk_detalle_venta_articulo_idx")
+  @@index([idventa], map: "fk_detalle_venta_venta_idx")
+}
+
+model ingreso {
+  idingreso         Int               @id @default(autoincrement())
+  idproveedor       Int
+  idusuario         Int
+  tipo_comprobante  String            @db.VarChar(20)
+  serie_comprobante String?           @db.VarChar(7)
+  num_comprobante   String            @db.VarChar(10)
+  fecha_hora        DateTime          @db.DateTime(0)
+  impuesto          Decimal           @db.Decimal(4, 2)
+  total_compra      Decimal           @db.Decimal(11, 2)
+  estado            String            @db.VarChar(20)
+  detalle_ingreso   detalle_ingreso[]
+  persona           persona           @relation(fields: [idproveedor], references: [idpersona], onDelete: NoAction, onUpdate: NoAction, map: "fk_ingreso_persona")
+  usuario           usuario           @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_ingreso_usuario")
+
+  @@index([idproveedor], map: "fk_ingreso_persona_idx")
+  @@index([idusuario], map: "fk_ingreso_usuario_idx")
+}
+
+model permiso {
+  idpermiso       Int               @id @default(autoincrement())
+  nombre          String            @db.VarChar(30)
+  usuario_permiso usuario_permiso[]
+}
+
+model persona {
+  idpersona      Int       @id @default(autoincrement())
+  tipo_persona   String    @db.VarChar(20)
+  nombre         String    @db.VarChar(100)
+  tipo_documento String?   @db.VarChar(20)
+  num_documento  String?   @db.VarChar(20)
+  direccion      String?   @db.VarChar(70)
+  telefono       String?   @db.VarChar(20)
+  email          String?   @db.VarChar(50)
+  ingreso        ingreso[]
+  venta          venta[]
+}
+
+model usuario {
+  idusuario       Int               @id @default(autoincrement())
+  nombre          String            @db.VarChar(100)
+  tipo_documento  String            @db.VarChar(20)
+  num_documento   String            @db.VarChar(20)
+  direccion       String?           @db.VarChar(70)
+  telefono        String?           @db.VarChar(20)
+  email           String?           @db.VarChar(50)
+  cargo           String?           @db.VarChar(20)
+  login           String            @unique(map: "login_UNIQUE") @db.VarChar(20)
+  password           String            @db.VarChar(64)
+  imagen          String            @db.VarChar(100)
+  condicion       Boolean           @default(true)
+  ingreso         ingreso[]
+  usuario_permiso usuario_permiso[]
+  venta           venta[]
+}
+
+model usuario_permiso {
+  idusuario_permiso Int     @id @default(autoincrement())
+  idusuario         Int
+  idpermiso         Int
+  permiso           permiso @relation(fields: [idpermiso], references: [idpermiso], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_permiso_permiso")
+  usuario           usuario @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_permiso_usuario")
+
+  @@index([idpermiso], map: "fk_usuario_permiso_permiso_idx")
+  @@index([idusuario], map: "fk_usuario_permiso_usuario_idx")
+}
+
+model venta {
+  idventa           Int             @id @default(autoincrement())
+  idcliente         Int
+  idusuario         Int
+  tipo_comprobante  String          @db.VarChar(20)
+  serie_comprobante String?         @db.VarChar(7)
+  num_comprobante   String          @db.VarChar(10)
+  fecha_hora        DateTime        @db.DateTime(0)
+  impuesto          Decimal         @db.Decimal(4, 2)
+  total_venta       Decimal         @db.Decimal(11, 2)
+  estado            String          @db.VarChar(20)
+  detalle_venta     detalle_venta[]
+  persona           persona         @relation(fields: [idcliente], references: [idpersona], onDelete: NoAction, onUpdate: NoAction, map: "fk_venta_persona")
+  usuario           usuario         @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_venta_usuario")
+
+  @@index([idcliente], map: "fk_venta_persona_idx")
+  @@index([idusuario], map: "fk_venta_usuario_idx")
+}
