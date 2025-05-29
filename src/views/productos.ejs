@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('partials/_head', { pageTitle: pageTitle }) %>
+</head>
+<body>
+    <div class="layout">
+        <%- include('partials/_sidebar', { activeMenu: activeMenu }) %>
+        <div class="main-content">
+            <%- include('partials/_navbar', { user: user }) %>
+            <div class="content-wrapper p-3">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="h3"><%= pageTitle ? pageTitle.split(' - ')[0] : 'Productos' %></h1>
+                        <a href="/productos/nuevo" class="btn btn-success">
+                            <i class="bi bi-plus-circle me-2"></i>Añadir Producto
+                        </a>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Imagen</th>
+                                            <th>Nombre</th>
+                                            <th>Cód. Barras</th>
+                                            <th>Categoría</th>
+                                            <th>Stock</th>
+                                            <th>Unidad</th>
+                                            <th>Precio Venta</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (typeof articulos !== 'undefined' && articulos && articulos.length > 0) { %>
+                                            <% articulos.forEach(function(articulo) { %>
+                                                <tr>
+                                                    <td><%= articulo.id_articulo %></td>
+                                                    <td>
+                                                        <% if (articulo.ruta_imagen) { %>
+                                                            <img src="/img/productos/<%= articulo.ruta_imagen %>" alt="<%= articulo.nombre %>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 0.25rem;">
+                                                        <% } else { %>
+                                                            <img src="/img/placeholder_producto.png" alt="Sin imagen" style="width: 50px; height: 50px; object-fit: cover; border-radius: 0.25rem;">
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= articulo.nombre %></td>
+                                                    <td><%= articulo.codigo_barra || 'N/A' %></td>
+                                                    <td><%= articulo.categoria_articulo.nombre %></td>
+                                                    <td><%= parseFloat(articulo.stock_actual).toFixed(2) %></td>
+                                                    <td><%= articulo.unidad_medida ? articulo.unidad_medida.abreviatura : 'N/A' %></td>
+                                                    <td>$<%= parseFloat(articulo.precio_venta_neto).toFixed(2) %></td>
+                                                    <td>
+                                                        <% if (articulo.activo) { %>
+                                                            <span class="badge bg-success">Activo</span>
+                                                        <% } else { %>
+                                                            <span class="badge bg-danger">Inactivo</span>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/productos/editar/<%= articulo.id_articulo %>" class="btn btn-sm btn-outline-primary me-1" title="Editar">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </a>
+                                                        <button class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="confirmarEliminacionProducto(<%= articulo.id_articulo %>)">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="10" class="text-center py-4">No hay productos para mostrar.</td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('partials/_scripts') %>
+    <script>
+        function confirmarEliminacionProducto(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar este producto? ID: ' + id + '? Esta acción no se puede deshacer.')) {
+                console.log('Solicitud de eliminación para producto ID:', id);
+                alert('Funcionalidad de eliminación aún no implementada en el servidor.');
+            }
+        }
+    </script>
+</body>
+</html>

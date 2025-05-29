@@ -8,139 +8,288 @@ datasource db {
 }
 
 model articulo {
-  idarticulo      Int               @id @default(autoincrement())
-  idcategoria     Int
-  codigo          String?           @db.VarChar(50)
-  nombre          String            @unique(map: "nombre_UNIQUE") @db.VarChar(100)
-  stock           Int
-  descripcion     String?           @db.VarChar(256)
-  imagen          String?           @db.VarChar(50)
-  condicion       Boolean           @default(true)
-  categoria       categoria         @relation(fields: [idcategoria], references: [idcategoria], onDelete: NoAction, onUpdate: NoAction, map: "fk_articulo_categoria")
-  detalle_ingreso detalle_ingreso[]
-  detalle_venta   detalle_venta[]
+  id_articulo               Int                @id @default(autoincrement())
+  id_categoria_articulo     Int
+  id_unidad_medida          Int?
+  codigo_barra              String?            @unique(map: "uq_articulo_codigo_barra") @db.VarChar(100)
+  nombre                    String             @db.VarChar(150)
+  stock_actual              Decimal            @default(0.00) @db.Decimal(10, 2)
+  descripcion               String?            @db.Text
+  ruta_imagen               String?            @db.VarChar(255)
+  precio_compra_neto_actual Decimal?           @default(0.00) @db.Decimal(10, 2)
+  precio_venta_neto         Decimal            @default(0.00) @db.Decimal(10, 2)
+  aplica_impuesto           Boolean            @default(true)
+  activo                    Boolean            @default(true)
+  categoria_articulo        categoria_articulo @relation(fields: [id_categoria_articulo], references: [id_categoria_articulo], map: "fk_articulo_categoria_articulo")
+  unidad_medida             unidad_medida?     @relation(fields: [id_unidad_medida], references: [id_unidad_medida], map: "fk_articulo_unidad_medida")
+  detalle_compra            detalle_compra[]
+  detalle_venta             detalle_venta[]
 
-  @@index([idcategoria], map: "fk_articulo_categoria_idx")
-}
-
-model categoria {
-  idcategoria Int        @id @default(autoincrement())
-  nombre      String     @unique(map: "nombre_UNIQUE") @db.VarChar(50)
-  descripcion String?    @db.VarChar(256)
-  condicion   Boolean    @default(true)
-  articulo    articulo[]
-}
-
-model detalle_ingreso {
-  iddetalle_ingreso Int      @id @default(autoincrement())
-  idingreso         Int
-  idarticulo        Int
-  cantidad          Int
-  precio_compra     Decimal  @db.Decimal(11, 2)
-  precio_venta      Decimal  @db.Decimal(11, 2)
-  articulo          articulo @relation(fields: [idarticulo], references: [idarticulo], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_ingreso_articulo")
-  ingreso           ingreso  @relation(fields: [idingreso], references: [idingreso], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_ingreso_ingreso")
-
-  @@index([idarticulo], map: "fk_detalle_ingreso_articulo_idx")
-  @@index([idingreso], map: "fk_detalle_ingreso_ingreso_idx")
+  @@index([nombre], map: "idx_articulo_nombre")
+  @@index([id_categoria_articulo], map: "idx_fk_articulo_categoria")
+  @@index([id_unidad_medida], map: "idx_fk_articulo_unidad_medida")
 }
 
 model detalle_venta {
-  iddetalle_venta Int      @id @default(autoincrement())
-  idventa         Int
-  idarticulo      Int
-  cantidad        Int
-  precio_venta    Decimal  @db.Decimal(11, 2)
-  descuento       Decimal  @db.Decimal(11, 2)
-  articulo        articulo @relation(fields: [idarticulo], references: [idarticulo], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_venta_articulo")
-  venta           venta    @relation(fields: [idventa], references: [idventa], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_venta_venta")
+  id_detalle_venta              Int      @id @default(autoincrement())
+  id_venta                      Int
+  id_articulo                   Int
+  cantidad                      Decimal  @db.Decimal(10, 2)
+  precio_venta_unitario_base    Decimal  @db.Decimal(10, 2)
+  porcentaje_descuento_linea    Decimal  @default(0.00) @db.Decimal(5, 2)
+  monto_descuento_linea         Decimal  @default(0.00) @db.Decimal(10, 2)
+  precio_unitario_con_descuento Decimal  @db.Decimal(10, 2)
+  subtotal_linea_neto           Decimal  @db.Decimal(12, 2)
+  tasa_impuesto_linea           Decimal? @default(0.00) @db.Decimal(5, 2)
+  monto_impuesto_linea          Decimal? @default(0.00) @db.Decimal(10, 2)
+  articulo                      articulo @relation(fields: [id_articulo], references: [id_articulo], map: "fk_detalle_venta_articulo")
+  venta                         venta    @relation(fields: [id_venta], references: [id_venta], onDelete: Cascade, map: "fk_detalle_venta_venta")
 
-  @@index([idarticulo], map: "fk_detalle_venta_articulo_idx")
-  @@index([idventa], map: "fk_detalle_venta_venta_idx")
-}
-
-model ingreso {
-  idingreso         Int               @id @default(autoincrement())
-  idproveedor       Int
-  idusuario         Int
-  tipo_comprobante  String            @db.VarChar(20)
-  serie_comprobante String?           @db.VarChar(7)
-  num_comprobante   String            @db.VarChar(10)
-  fecha_hora        DateTime          @db.DateTime(0)
-  impuesto          Decimal           @db.Decimal(4, 2)
-  total_compra      Decimal           @db.Decimal(11, 2)
-  estado            String            @db.VarChar(20)
-  detalle_ingreso   detalle_ingreso[]
-  persona           persona           @relation(fields: [idproveedor], references: [idpersona], onDelete: NoAction, onUpdate: NoAction, map: "fk_ingreso_persona")
-  usuario           usuario           @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_ingreso_usuario")
-
-  @@index([idproveedor], map: "fk_ingreso_persona_idx")
-  @@index([idusuario], map: "fk_ingreso_usuario_idx")
-}
-
-model permiso {
-  idpermiso       Int               @id @default(autoincrement())
-  nombre          String            @db.VarChar(30)
-  usuario_permiso usuario_permiso[]
-}
-
-model persona {
-  idpersona      Int       @id @default(autoincrement())
-  tipo_persona   String    @db.VarChar(20)
-  nombre         String    @db.VarChar(100)
-  tipo_documento String?   @db.VarChar(20)
-  num_documento  String?   @db.VarChar(20)
-  direccion      String?   @db.VarChar(70)
-  telefono       String?   @db.VarChar(20)
-  email          String?   @db.VarChar(50)
-  ingreso        ingreso[]
-  venta          venta[]
+  @@unique([id_venta, id_articulo], map: "uq_detalle_venta_venta_articulo")
+  @@index([id_articulo], map: "idx_fk_detalle_venta_articulo")
 }
 
 model usuario {
-  idusuario       Int               @id @default(autoincrement())
-  nombre          String            @db.VarChar(100)
-  tipo_documento  String            @db.VarChar(20)
-  num_documento   String            @db.VarChar(20)
-  direccion       String?           @db.VarChar(70)
-  telefono        String?           @db.VarChar(20)
-  email           String?           @db.VarChar(50)
-  cargo           String?           @db.VarChar(20)
-  login           String            @unique(map: "login_UNIQUE") @db.VarChar(20)
-  password           String            @db.VarChar(64)
-  imagen          String            @db.VarChar(100)
-  condicion       Boolean           @default(true)
-  ingreso         ingreso[]
-  usuario_permiso usuario_permiso[]
-  venta           venta[]
-}
+  id_usuario                 Int           @id @default(autoincrement())
+  id_rol_usuario             Int
+  nombre_completo            String        @db.VarChar(100)
+  tipo_documento_identidad   String?       @db.VarChar(30)
+  numero_documento_identidad String?       @db.VarChar(30)
+  telefono                   String?       @db.VarChar(30)
+  email                      String?       @unique(map: "uq_usuario_email") @db.VarChar(100)
+  cargo_descripcion          String?       @db.VarChar(50)
+  login_acceso               String        @unique(map: "uq_usuario_login") @db.VarChar(50)
+  password_hash              String        @db.VarChar(255)
+  ruta_avatar                String?       @db.VarChar(255)
+  fecha_creacion             DateTime      @default(now()) @db.Timestamp(0)
+  ultimo_acceso              DateTime?     @db.DateTime(0)
+  activo                     Boolean       @default(true)
+  caja_sesion                caja_sesion[]
+  compra                     compra[]
+  rol_usuario                rol_usuario   @relation(fields: [id_rol_usuario], references: [id_rol_usuario], map: "fk_usuario_rol_usuario")
+  venta                      venta[]
 
-model usuario_permiso {
-  idusuario_permiso Int     @id @default(autoincrement())
-  idusuario         Int
-  idpermiso         Int
-  permiso           permiso @relation(fields: [idpermiso], references: [idpermiso], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_permiso_permiso")
-  usuario           usuario @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_permiso_usuario")
-
-  @@index([idpermiso], map: "fk_usuario_permiso_permiso_idx")
-  @@index([idusuario], map: "fk_usuario_permiso_usuario_idx")
+  @@index([id_rol_usuario], map: "idx_fk_usuario_rol")
 }
 
 model venta {
-  idventa           Int             @id @default(autoincrement())
-  idcliente         Int
-  idusuario         Int
-  tipo_comprobante  String          @db.VarChar(20)
-  serie_comprobante String?         @db.VarChar(7)
-  num_comprobante   String          @db.VarChar(10)
-  fecha_hora        DateTime        @db.DateTime(0)
-  impuesto          Decimal         @db.Decimal(4, 2)
-  total_venta       Decimal         @db.Decimal(11, 2)
-  estado            String          @db.VarChar(20)
-  detalle_venta     detalle_venta[]
-  persona           persona         @relation(fields: [idcliente], references: [idpersona], onDelete: NoAction, onUpdate: NoAction, map: "fk_venta_persona")
-  usuario           usuario         @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_venta_usuario")
+  id_venta                       Int                 @id @default(autoincrement())
+  id_tercero_cliente             Int
+  id_usuario_vendedor            Int
+  id_caja_sesion                 Int?
+  tipo_comprobante               String              @db.VarChar(50)
+  serie_comprobante              String?             @db.VarChar(20)
+  numero_comprobante             String              @db.VarChar(30)
+  fecha_hora_venta               DateTime            @db.DateTime(0)
+  subtotal_venta_neto            Decimal             @default(0.00) @db.Decimal(12, 2)
+  total_descuentos               Decimal             @default(0.00) @db.Decimal(10, 2)
+  total_impuestos_venta          Decimal             @default(0.00) @db.Decimal(10, 2)
+  total_venta_final              Decimal             @db.Decimal(12, 2)
+  tasa_impuesto_general_aplicada Decimal?            @default(0.00) @db.Decimal(5, 2)
+  observaciones                  String?             @db.Text
+  estado_venta                   venta_estado_venta  @default(Pagada)
+  detalle_venta                  detalle_venta[]
+  caja_sesion                    caja_sesion?        @relation(fields: [id_caja_sesion], references: [id_caja_sesion], map: "fk_venta_caja_sesion")
+  tercero                        tercero             @relation(fields: [id_tercero_cliente], references: [id_tercero], map: "fk_venta_tercero_cliente")
+  usuario                        usuario             @relation(fields: [id_usuario_vendedor], references: [id_usuario], map: "fk_venta_usuario_vendedor")
+  venta_metodo_pago              venta_metodo_pago[]
 
-  @@index([idcliente], map: "fk_venta_persona_idx")
-  @@index([idusuario], map: "fk_venta_usuario_idx")
+  @@unique([tipo_comprobante, serie_comprobante, numero_comprobante], map: "uq_venta_tipo_serie_numero")
+  @@index([id_caja_sesion], map: "idx_fk_venta_caja_sesion")
+  @@index([id_tercero_cliente], map: "idx_fk_venta_cliente")
+  @@index([id_usuario_vendedor], map: "idx_fk_venta_usuario")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model caja_fisica {
+  id_caja_fisica Int           @id @default(autoincrement())
+  nombre_caja    String        @unique(map: "uq_caja_fisica_nombre") @db.VarChar(50)
+  ubicacion      String?       @db.VarChar(100)
+  activa         Boolean       @default(true)
+  caja_sesion    caja_sesion[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model caja_sesion {
+  id_caja_sesion                 Int                       @id @default(autoincrement())
+  id_usuario_apertura            Int
+  id_caja_fisica                 Int?
+  fecha_hora_apertura            DateTime                  @db.DateTime(0)
+  monto_inicial_efectivo         Decimal                   @default(0.00) @db.Decimal(12, 2)
+  fecha_hora_cierre              DateTime?                 @db.DateTime(0)
+  total_ventas_sistema_efectivo  Decimal?                  @db.Decimal(12, 2)
+  total_ingresos_extras_efectivo Decimal?                  @default(0.00) @db.Decimal(12, 2)
+  total_egresos_extras_efectivo  Decimal?                  @default(0.00) @db.Decimal(12, 2)
+  monto_final_efectivo_sistema   Decimal?                  @db.Decimal(12, 2)
+  monto_final_efectivo_conteo    Decimal?                  @db.Decimal(12, 2)
+  diferencia_efectivo_arqueo     Decimal?                  @db.Decimal(12, 2)
+  total_ventas_otros_metodos     Decimal?                  @db.Decimal(12, 2)
+  observaciones_cierre           String?                   @db.Text
+  estado_sesion                  caja_sesion_estado_sesion @default(Abierta)
+  caja_fisica                    caja_fisica?              @relation(fields: [id_caja_fisica], references: [id_caja_fisica], map: "fk_caja_sesion_caja_fisica")
+  usuario                        usuario                   @relation(fields: [id_usuario_apertura], references: [id_usuario], map: "fk_caja_sesion_usuario_apertura")
+  venta                          venta[]
+
+  @@index([id_caja_fisica], map: "idx_fk_caja_sesion_caja_fisica")
+  @@index([id_usuario_apertura], map: "idx_fk_caja_sesion_usuario")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model categoria_articulo {
+  id_categoria_articulo Int        @id @default(autoincrement())
+  nombre                String     @unique(map: "uq_categoria_nombre") @db.VarChar(70)
+  descripcion           String?    @db.VarChar(255)
+  activa                Boolean    @default(true)
+  articulo              articulo[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model compra {
+  id_compra              Int                  @id @default(autoincrement())
+  id_tercero_proveedor   Int
+  id_usuario_registro    Int
+  tipo_comprobante       String               @db.VarChar(50)
+  serie_comprobante      String?              @db.VarChar(20)
+  numero_comprobante     String               @db.VarChar(30)
+  fecha_hora_compra      DateTime             @db.DateTime(0)
+  subtotal_compra        Decimal              @default(0.00) @db.Decimal(12, 2)
+  total_impuestos_compra Decimal              @default(0.00) @db.Decimal(10, 2)
+  total_compra_final     Decimal              @db.Decimal(12, 2)
+  tasa_impuesto_aplicada Decimal?             @default(0.00) @db.Decimal(5, 2)
+  observaciones          String?              @db.Text
+  estado_compra          compra_estado_compra @default(Registrada)
+  tercero                tercero              @relation(fields: [id_tercero_proveedor], references: [id_tercero], map: "fk_compra_tercero_proveedor")
+  usuario                usuario              @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_compra_usuario_registro")
+  detalle_compra         detalle_compra[]
+
+  @@unique([tipo_comprobante, serie_comprobante, numero_comprobante], map: "uq_compra_tipo_serie_numero")
+  @@index([id_tercero_proveedor], map: "idx_fk_compra_proveedor")
+  @@index([id_usuario_registro], map: "idx_fk_compra_usuario")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model detalle_compra {
+  id_detalle_compra           Int      @id @default(autoincrement())
+  id_compra                   Int
+  id_articulo                 Int
+  cantidad                    Decimal  @db.Decimal(10, 2)
+  precio_compra_unitario_neto Decimal  @db.Decimal(10, 2)
+  subtotal_linea_neto         Decimal  @db.Decimal(12, 2)
+  impuesto_linea              Decimal? @default(0.00) @db.Decimal(10, 2)
+  articulo                    articulo @relation(fields: [id_articulo], references: [id_articulo], map: "fk_detalle_compra_articulo")
+  compra                      compra   @relation(fields: [id_compra], references: [id_compra], onDelete: Cascade, map: "fk_detalle_compra_compra")
+
+  @@unique([id_compra, id_articulo], map: "uq_detalle_compra_compra_articulo")
+  @@index([id_articulo], map: "idx_fk_detalle_compra_articulo")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model metodo_pago {
+  id_metodo_pago      Int                 @id @default(autoincrement())
+  nombre_metodo       String              @unique(map: "uq_metodo_pago_nombre") @db.VarChar(50)
+  requiere_referencia Boolean             @default(false)
+  es_efectivo         Boolean             @default(false)
+  activo              Boolean             @default(true)
+  venta_metodo_pago   venta_metodo_pago[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model permiso_sistema {
+  id_permiso_sistema  Int                   @id @default(autoincrement())
+  nombre_permiso      String                @unique(map: "uq_permiso_nombre") @db.VarChar(100)
+  descripcion_permiso String?               @db.VarChar(255)
+  rol_permiso_sistema rol_permiso_sistema[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rol_permiso_sistema {
+  id_rol_permiso_sistema Int             @id @default(autoincrement())
+  id_rol_usuario         Int
+  id_permiso_sistema     Int
+  permiso_sistema        permiso_sistema @relation(fields: [id_permiso_sistema], references: [id_permiso_sistema], onDelete: Cascade, map: "fk_rol_permiso_permiso_sistema")
+  rol_usuario            rol_usuario     @relation(fields: [id_rol_usuario], references: [id_rol_usuario], onDelete: Cascade, map: "fk_rol_permiso_rol_usuario")
+
+  @@unique([id_rol_usuario, id_permiso_sistema], map: "uq_rol_permiso")
+  @@index([id_permiso_sistema], map: "idx_fk_rol_permiso_permiso")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rol_usuario {
+  id_rol_usuario      Int                   @id @default(autoincrement())
+  nombre_rol          String                @unique(map: "uq_rol_nombre") @db.VarChar(50)
+  rol_permiso_sistema rol_permiso_sistema[]
+  usuario             usuario[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tercero {
+  id_tercero                 Int                  @id @default(autoincrement())
+  tipo_tercero               tercero_tipo_tercero
+  nombre_razon_social        String               @db.VarChar(150)
+  tipo_documento_identidad   String?              @db.VarChar(30)
+  numero_documento_identidad String?              @db.VarChar(30)
+  direccion                  String?              @db.VarChar(200)
+  telefono_contacto          String?              @db.VarChar(30)
+  email                      String?              @db.VarChar(100)
+  fecha_registro             DateTime             @default(now()) @db.Timestamp(0)
+  activo                     Boolean              @default(true)
+  compra                     compra[]
+  venta                      venta[]
+
+  @@unique([tipo_documento_identidad, numero_documento_identidad], map: "uq_tercero_tipo_num_documento")
+  @@index([nombre_razon_social], map: "idx_tercero_nombre")
+  @@index([tipo_tercero], map: "idx_tercero_tipo")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model unidad_medida {
+  id_unidad_medida Int        @id @default(autoincrement())
+  nombre           String     @unique(map: "uq_unidad_medida_nombre") @db.VarChar(50)
+  abreviatura      String     @unique(map: "uq_unidad_medida_abreviatura") @db.VarChar(10)
+  activa           Boolean    @default(true)
+  articulo         articulo[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model venta_metodo_pago {
+  id_venta_metodo_pago Int         @id @default(autoincrement())
+  id_venta             Int
+  id_metodo_pago       Int
+  monto_pagado         Decimal     @db.Decimal(12, 2)
+  referencia_pago      String?     @db.VarChar(100)
+  fecha_hora_pago      DateTime    @default(now()) @db.Timestamp(0)
+  metodo_pago          metodo_pago @relation(fields: [id_metodo_pago], references: [id_metodo_pago], map: "fk_venta_metodo_pago_metodo_pago")
+  venta                venta       @relation(fields: [id_venta], references: [id_venta], onDelete: Cascade, map: "fk_venta_metodo_pago_venta")
+
+  @@index([id_metodo_pago], map: "idx_fk_venta_pago_metodo")
+  @@index([id_venta], map: "idx_fk_venta_pago_venta")
+}
+
+enum tercero_tipo_tercero {
+  Cliente
+  Proveedor
+  Otro
+}
+
+enum compra_estado_compra {
+  Registrada
+  Recibida
+  Parcialmente_Recibida @map("Parcialmente Recibida")
+  Anulada
+}
+
+enum caja_sesion_estado_sesion {
+  Abierta
+  Cerrada
+  Arqueada
+}
+
+enum venta_estado_venta {
+  Cotizacion
+  Pendiente_de_Pago   @map("Pendiente de Pago")
+  Pagada
+  Parcialmente_Pagada @map("Parcialmente Pagada")
+  Anulada
+  Devolucion_Parcial  @map("Devolucion Parcial")
+  Devolucion_Total    @map("Devolucion Total")
 }

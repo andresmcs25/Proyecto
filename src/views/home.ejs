@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('partials/_head', { pageTitle: pageTitle }) %>
+</head>
+<body>
+    <div class="layout">
+        <%- include('partials/_sidebar', { activeMenu: activeMenu }) %>
+        <div class="main-content">
+            <%- include('partials/_navbar', { user: user }) %>
+            <div class="content-wrapper p-3">
+                <h1>Bienvenido a NeoPOS</h1>
+                <p>Este es el panel principal. Selecciona una opción del menú para comenzar.</p>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <p>Hola, <%= user.nombre %> (<%= user.rol %>)!</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <%- include('partials/_scripts') %>
+</body>
+</html>

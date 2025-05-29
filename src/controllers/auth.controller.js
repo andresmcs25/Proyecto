@@ -11,12 +11,11 @@ export const loginUser = async (req, res) => {
     const userFound = await prisma.usuario.findFirst({ where: { email } });
     
 
-    if (!userFound || userFound.password !== password) {
+    if (!userFound || userFound.password_hash !== password) {
       return res.status(401).send("Usuario o contraseña incorrectos");
     }
-
     // Guardar sesión
-    req.session.userId = userFound.idusuario;
+    req.session.userId = userFound.id_usuario;
 
     // Responder con éxito y ruta para redirigir
     return res.status(200).json({ message: "Login exitoso", redirectTo: "/home" });
