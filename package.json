@@ -1,13 +1,13 @@
 {
-  "name": "borrar-jose",
+  "name": "neopos",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Sistema Pos",
+  "main": "/src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jose Piñeros",
   "license": "ISC",
   "type": "module",
   "dependencies": {

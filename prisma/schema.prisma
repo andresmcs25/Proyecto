@@ -10,10 +10,9 @@ datasource db {
 model articulo {
   id_articulo               Int                @id @default(autoincrement())
   id_categoria_articulo     Int
-  id_unidad_medida          Int?
   codigo_barra              String?            @unique(map: "uq_articulo_codigo_barra") @db.VarChar(100)
   nombre                    String             @db.VarChar(150)
-  stock_actual              Decimal            @default(0.00) @db.Decimal(10, 2)
+  stock_actual              Int                @default(0)
   descripcion               String?            @db.Text
   ruta_imagen               String?            @db.VarChar(255)
   precio_compra_neto_actual Decimal?           @default(0.00) @db.Decimal(10, 2)
@@ -21,13 +20,11 @@ model articulo {
   aplica_impuesto           Boolean            @default(true)
   activo                    Boolean            @default(true)
   categoria_articulo        categoria_articulo @relation(fields: [id_categoria_articulo], references: [id_categoria_articulo], map: "fk_articulo_categoria_articulo")
-  unidad_medida             unidad_medida?     @relation(fields: [id_unidad_medida], references: [id_unidad_medida], map: "fk_articulo_unidad_medida")
   detalle_compra            detalle_compra[]
   detalle_venta             detalle_venta[]
 
   @@index([nombre], map: "idx_articulo_nombre")
   @@index([id_categoria_articulo], map: "idx_fk_articulo_categoria")
-  @@index([id_unidad_medida], map: "idx_fk_articulo_unidad_medida")
 }
 
 model detalle_venta {
@@ -195,30 +192,16 @@ model metodo_pago {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model permiso_sistema {
-  id_permiso_sistema  Int                   @id @default(autoincrement())
-  nombre_permiso      String                @unique(map: "uq_permiso_nombre") @db.VarChar(100)
-  descripcion_permiso String?               @db.VarChar(255)
-  rol_permiso_sistema rol_permiso_sistema[]
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model rol_permiso_sistema {
-  id_rol_permiso_sistema Int             @id @default(autoincrement())
-  id_rol_usuario         Int
-  id_permiso_sistema     Int
-  permiso_sistema        permiso_sistema @relation(fields: [id_permiso_sistema], references: [id_permiso_sistema], onDelete: Cascade, map: "fk_rol_permiso_permiso_sistema")
-  rol_usuario            rol_usuario     @relation(fields: [id_rol_usuario], references: [id_rol_usuario], onDelete: Cascade, map: "fk_rol_permiso_rol_usuario")
-
-  @@unique([id_rol_usuario, id_permiso_sistema], map: "uq_rol_permiso")
-  @@index([id_permiso_sistema], map: "idx_fk_rol_permiso_permiso")
+  id_permiso_sistema  Int     @id @default(autoincrement())
+  nombre_permiso      String  @unique(map: "uq_permiso_nombre") @db.VarChar(100)
+  descripcion_permiso String? @db.VarChar(255)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model rol_usuario {
-  id_rol_usuario      Int                   @id @default(autoincrement())
-  nombre_rol          String                @unique(map: "uq_rol_nombre") @db.VarChar(50)
-  rol_permiso_sistema rol_permiso_sistema[]
-  usuario             usuario[]
+  id_rol_usuario Int       @id @default(autoincrement())
+  nombre_rol     String    @unique(map: "uq_rol_nombre") @db.VarChar(50)
+  usuario        usuario[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -239,15 +222,6 @@ model tercero {
   @@unique([tipo_documento_identidad, numero_documento_identidad], map: "uq_tercero_tipo_num_documento")
   @@index([nombre_razon_social], map: "idx_tercero_nombre")
   @@index([tipo_tercero], map: "idx_tercero_tipo")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model unidad_medida {
-  id_unidad_medida Int        @id @default(autoincrement())
-  nombre           String     @unique(map: "uq_unidad_medida_nombre") @db.VarChar(50)
-  abreviatura      String     @unique(map: "uq_unidad_medida_abreviatura") @db.VarChar(10)
-  activa           Boolean    @default(true)
-  articulo         articulo[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

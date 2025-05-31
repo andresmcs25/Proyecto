@@ -12,8 +12,6 @@ export const renderHome = async(req, res) => {
         where:{id_rol_usuario: userFound.id_rol_usuario}
     })
 
-    console.log(userRol)
-
     const user = {
         nombre: userFound.nombre_completo,
         rol: userRol.nombre_rol
