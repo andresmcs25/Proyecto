@@ -13,7 +13,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="h3"><%= pageTitle ? pageTitle.split(' - ')[0] : 'Productos' %></h1>
                         <!-- Botón para abrir el modal -->
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarProducto">
+                        <button type="button" class="btn btn-sm btn-neo-agregar" data-bs-toggle="modal" data-bs-target="#modalAgregarProducto">
                             <i class="bi bi-plus-circle me-1"></i>Añadir Producto
                         </button>
                     </div>
@@ -55,18 +55,67 @@
                               <div class="mb-3">
                                 <label for="precio_venta" class="form-label">Precio Venta</label>
                                 <input type="number" class="form-control" id="precio_venta" name="precio_venta_neto" min="0" step="any" required>
+                                <span id="precio_venta_formateado" class="text-muted"></span>
                               </div>
 
                             </div>
                             <div class="modal-footer">
-                              <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                              <button type="submit" class="btn btn-neo-agregar">Guardar Producto</button>
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             </div>
                           </form>
                         </div>
                       </div>
                     </div>
-
+                    <!-- Modal para Editar Producto -->
+                    <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-labelledby="modalEditarProductoLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                          <form id="formEditarProducto" method="POST">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="modalEditarProductoLabel">Editar Producto</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                              <input type="hidden" id="editar_id_articulo" name="id_articulo">
+                              <div class="mb-3">
+                                <label for="editar_nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="editar_nombre" name="nombre" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="editar_codigo_barra" class="form-label">Código de Barras</label>
+                                <input type="text" class="form-control" id="editar_codigo_barra" name="codigo_barra">
+                              </div>
+                              <div class="mb-3">
+                                <label for="editar_categoria" class="form-label">Categoría</label>
+                                <select class="form-select" id="editar_categoria" name="categoria" required>
+                                  <% if (typeof categorias !== "undefined" && categorias && categorias.length > 0) { %>
+                                    <% categorias.forEach(function(cat) { %>
+                                      <option value="<%= cat.id_categoria_articulo %>"><%= cat.nombre %></option>
+                                    <% }) %>
+                                  <% } else { %>
+                                    <option value="">No hay categorías</option>
+                                  <% } %>
+                                </select>
+                              </div>
+                              <div class="mb-3">
+                                <label for="editar_stock" class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="editar_stock" name="stock_actual" min="0" step="any" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="editar_precio_venta" class="form-label">Precio Venta</label>
+                                <input type="number" class="form-control" id="editar_precio_venta" name="precio_venta_neto" min="0" step="any" required>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-neo-agregar">Guardar Cambios</button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Tabla de Productos -->
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <div class="table-responsive">
@@ -92,18 +141,19 @@
                                                     <td><%= articulo.codigo_barra || 'N/A' %></td>
                                                     <td><%= articulo.categoria_articulo.nombre %></td>
                                                     <td><%= Math.floor(articulo.stock_actual) %></td>
-                                                    <td>$<%= parseFloat(articulo.precio_venta_neto).toFixed(2) %></td>
+                                                    <td><%= articulo.precio_venta_neto.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) %></td>
                                                     <td>
                                                         <% if (articulo.activo) { %>
-                                                            <span class="badge bg-success">Activo</span>
+                                                            <span class="badge badge-neo-activo">Activo</span>
                                                         <% } else { %>
                                                             <span class="badge bg-danger">Inactivo</span>
                                                         <% } %>
                                                     </td>
                                                     <td class="acciones-tabla">
-                                                        <a href="/productos/editar/<%= articulo.id_articulo %>" class="btn btn-sm btn-outline-primary me-1" title="Editar">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary me-1" title="Editar"
+                                                          onclick="abrirModalEditar(<%= articulo.id_articulo %>)">
                                                             <i class="bi bi-pencil-square"></i>
-                                                        </a>
+                                                        </button>
                                                         <button class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="confirmarEliminacionProducto(<%= articulo.id_articulo %>)">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
@@ -127,12 +177,8 @@
     <%- include('partials/_scripts') %>
 
     <script>
-        function confirmarEliminacionProducto(id) {
-            if (confirm('¿Estás seguro de que deseas eliminar este producto? ID: ' + id + '? Esta acción no se puede deshacer.')) {
-                console.log('Solicitud de eliminación para producto ID:', id);
-                alert('Funcionalidad de eliminación aún no implementada en el servidor.');
-            }
-        }
+        window.articulosData = <%- JSON.stringify(articulos) %>;
     </script>
+    <form id="formEliminarProducto" method="POST" style="display:none;"></form>
 </body>
 </html>

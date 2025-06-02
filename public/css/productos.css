@@ -1,0 +1,22 @@
+:root {
+  --neopos-dark-grey: #2c3e50;
+  --neopos-turquoise: #1ABC9C;
+  --neopos-turquoise-darker: #16A085;
+  --neopos-white: #FFFFFF;
+  --neopos-light-text: #e0e0e0;
+  --neopos-sidebar-hover-bg: #344f6b;
+  --neopos-sidebar-submenu-text: #bdc3c7;
+  --neopos-content-bg: #f4f6f8;
+}
+
+.btn-neo-agregar {
+  background-color: var(--neopos-turquoise) !important;
+  border-color: var(--neopos-turquoise-darker) !important;
+  color: var(--neopos-white) !important;
+}
+
+.badge-neo-activo {
+  background-color: var(--neopos-turquoise-darker) !important;
+  color: var(--neopos-white) !important;
+}
+
