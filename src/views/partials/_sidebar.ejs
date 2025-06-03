@@ -1,0 +1,115 @@
+<aside class="shadow p-3" id="sidebar">
+    <div class="text-center mb-4">
+        <a href="/home" class="text-decoration-none d-block">
+            <img src="/img/logo_3.PNG" alt="Logo NeoPOS" class="img-fluid mb-2" style="max-height: 60px;" />
+            <span class="brand-text-neopos">NeoPOS</span>
+        </a>
+    </div>
+    <nav>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="/home"
+                    class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.home) { %>active<% } %>">
+                    <i class="bi bi-speedometer me-2"></i> <span>Inicio</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.inventario) { %>active<% } %>"
+                    data-bs-toggle="collapse" href="#inventarioMenu" role="button">
+                    <i class="bi bi-box-seam-fill me-2"></i> <span>Inventario</span>
+                </a>
+                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.inventario) { %>show<% } %>"
+                    id="inventarioMenu">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a href="/productos"
+                                class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.productos) { %>active<% } %>">
+                                <i class="bi bi-circle me-2"></i> Productos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/categorias"
+                                class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.categorias) { %>active<% } %>">
+                                <i class="bi bi-circle me-2"></i> Categorías
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.compras) { %>active<% } %>"
+                    data-bs-toggle="collapse" href="#comprasMenu" role="button">
+                    <i class="bi bi-cart-check-fill me-2"></i> <span>Compras y Gastos</span>
+                </a>
+                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.compras) { %>show<% } %>"
+                    id="comprasMenu">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item"><a href="/compras/ingresos" class="nav-link"> <i
+                                    class="bi bi-circle me-2"></i> Ingresos</a></li>
+                        <li class="nav-item"><a href="/compras/proveedores" class="nav-link"> <i
+                                    class="bi bi-circle me-2"></i> Proveedores</a></li>
+                    </ul>
+                </div>
+            </li>    
+            <li class="nav-item">
+                <a class="nav-link <% if(activeMenu && activeMenu.ventas) { %> active <% } %>" 
+                data-bs-toggle="collapse" href="#ventasMenu" role="button">
+                <i class="bi bi-people-fill me-2"></i> <span>Ventas y Clientes</span>
+                </a>
+                <div class="collapse <% if(activeMenu && activeMenu.ventas) { %> show <% } %>" 
+                    id="ventasMenu">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a href="/ventas" class="nav-link <% if(activeMenu && activeMenu.ventas) { %> active <% } %>">
+                                <i class="bi <% if(activeMenu.ventas) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Ventas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/clientes" class="nav-link <% if(activeMenu && activeMenu.clientes) { %> active <% } %>">
+                                <i class="bi <% if(activeMenu.clientes) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Clientes
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>        
+            <li class="nav-item">
+                <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.administracion) { %>active<% } %>"
+                    data-bs-toggle="collapse" href="#administracionMenu" role="button">
+                    <i class="bi bi-box-seam-fill me-2"></i> <span>Administración</span>
+                </a>
+                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.administracion) { %>show<% } %>"id="administracionMenu">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a href="/usuarios" class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.usuarios) { %>active<% } %>">
+                                <i class="bi <% if(activeMenu.usuarios) { %>bi-circle-fill<% } else { %>bi-circle<% } %> me-2"></i>
+                                Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/permisos"
+                                class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.permisos)  { %>active<% } %>">
+                                <i class="bi bi-circle me-2"></i> Permisos
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>               
+            <li class="nav-item">
+                    <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.reportes) { %>active<% } %>"
+                    data-bs-toggle="collapse" href="#reportesMenu" role="button">
+                    <i class="bi bi-clipboard-data-fill me-2"></i> <span>Reportes</span>
+                </a>
+                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.reportes) { %>show<% } %>"
+                    id="reportesMenu">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item"><a href="/compras" class="nav-link"> <i class="bi bi-circle me-2"></i>
+                                Compras</a></li>
+                        <li class="nav-item"><a href="/ventas" class="nav-link"> <i class="bi bi-circle me-2"></i>
+                                Ventas</a></li>
+                    </ul>
+                </div>               
+            </li>
+        </ul>
+    </nav>
+</aside>

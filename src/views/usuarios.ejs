@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/_head', { pageTitle: pageTitle }) %>
+</head>
+
+<body>
+    <div class="layout">
+        <%- include('partials/_sidebar', { activeMenu: activeMenu }) %>
+            <div class="main-content">
+                <%- include('partials/_navbar', { user: user }) %>
+                    <div class="content-wrapper p-3">
+                        <div class="container-fluid">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h1 class="h3">
+                                    <%= pageTitle ? pageTitle.split(' - ')[0] : ' Usuarios' %>
+                                </h1>
+
+                            </div>
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-striped table-sm" id="tablaUsuarioNeoPOS">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>Nombre</th>
+                                                    <th>Tipo de Identificación</th>
+                                                    <th>Identificación</th>
+                                                    <th>Teléfono</th>
+                                                    <th>Email</th>
+                                                    <th>Cargo</th>
+                                                    <th>Fecha de Creación</th>
+                                                    <th>Ultimo Acceso</th>
+                                                    <th>Rol</th>
+                                                    <th>Estado</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% usuarios.forEach(usuario=> { %>
+                                                    <tr>
+                                                        <td><%= usuario.nombre_completo %></td>
+                                                        <td><%= usuario.tipo_documento_identidad %></td>
+                                                        <td><%= usuario.numero_documento_identidad %></td>
+                                                        <td><%= usuario.telefono || 'N/A' %></td>
+                                                        <td><%= usuario.email %></td>
+                                                        <td><%= usuario.cargo_descripcion %></td>
+                                                        <td><%= new Date(usuario.fecha_creacion).toLocaleDateString() %></td>
+                                                        <td><%= usuario.ultimo_acceso ? new
+                                                                Date(usuario.ultimo_acceso).toLocaleDateString()
+                                                                : 'Nunca' %>
+                                                        </td>
+                                                        <td><%= usuario.rol_usuario.nombre_rol %></td>
+                                                        <td><button class="btn btn-sm <%= usuario.activo ? 'btn-success' : 'btn-danger' %>"
+                                                               onclick="toggleActivo(this, <%= usuario.id_usuario %>, <%= usuario.activo %>)">
+                                                            <%= usuario.activo ? 'Activo' : 'Inactivo' %></button>
+                                                        </td>
+                                                        <td class="acciones-tabla"> 
+                                                            <button class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="eliminarUsuario(<%= usuario.id_usuario %>, this)"> <i class="bi bi-trash"></i> </button>
+                                                            <button class="btn btn-sm btn-outline-success toggle-permisos" data-bs-toggle="modal" data-bs-target="#modalPermisos" title="Permisos" data-user-id="<%= usuario.id_usuario %>"><i class="bi bi-eye"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                        <!-- Modal para modificar permisos -->
+                                        <div class="modal fade" id="modalPermisos" tabindex="-1" aria-labelledby="modalPermisosLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Modificar permisos de vista</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="formPermisos">                                                            
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="permisoInventario" name="ventas">
+                                                                <label class="form-check-label" for="permisoVentas">Inventario</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="permisoCompras" name="compras">
+                                                                <label class="form-check-label" for="permisoUsuarios">Compras y Gastos</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="permisoVentas" name="ventas">
+                                                                <label class="form-check-label" for="permisoConfiguracion">Ventas y Clientes</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="permisoAdministracion" name="administracion">
+                                                                <label class="form-check-label" for="permisoConfiguracion">Administración</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="permisoReportes" name="reportes">
+                                                                <label class="form-check-label" for="permisoConfiguracion">Reportes</label>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                                        <button type="button" class="btn btn-success btn-sm" id="guardarPermisos">Guardar cambios</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+    </div>
+    <%- include('partials/_scripts') %>
+    <script src="/js/usuario.js"></script>
+</body>
+
+</html>

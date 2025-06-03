@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/_head', { pageTitle: pageTitle }) %>
+</head>
+
+<body>
+    <div class="layout">
+        <%- include('partials/_sidebar', { activeMenu: activeMenu }) %>
+            <div class="main-content">
+                <%- include('partials/_navbar', { user: user }) %>
+                    <div class="content-wrapper p-3">
+                        <div class="container-fluid">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h1 class="h3">
+                                    <%= pageTitle ? pageTitle.split(' - ')[0] : ' Usuarios' %>
+                                </h1>
+
+                            </div>
+                            <div class="card shadow-sm">
+                                <table class="table table-hover table-striped table-sm" id="tablaVentasNeoPOS">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>ID</th>
+                                            <th>Cliente</th>
+                                            <th>Vendedor</th>
+                                            <th>Tipo Comprobante</th>
+                                            <th>Serie</th>
+                                            <th>#Compobante</th>
+                                            <th>Valor Total</th>
+                                            <th>Observaciones</th>
+                                            <th>Estado</th>
+                                            <th>DescargarFactura</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% ventas.forEach(venta=> { %>
+                                            <tr class="text-center">
+                                                <td><%= venta.id_venta %></td>
+                                                <td><%= venta.id_tercero_cliente.nombre_razon_social %></td>
+                                                <td><%= venta.id_usuario_vendedor.nombre_completo %></td>
+                                                <td><%= venta.tipo_comprobante %></td>
+                                                <td><%= venta.serie_comprobante %></td>
+                                                <td><%= venta.numero_comprobante %></td>
+                                                <td><%= venta.total_venta_final %></td>
+                                                <td><%= venta.observaciones %></td>
+                                                <td><%= venta.estado_venta %></td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+    </div>
+    <%- include('partials/_scripts') %>
+        <script src="/js/ventas.js"></script>
+</body>
+
+</html>

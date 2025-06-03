@@ -1,0 +1,245 @@
+:root {
+  --neopos-dark-grey: #2c3e50;
+  --neopos-turquoise: #1ABC9C;
+  --neopos-turquoise-darker: #16A085;
+  --neopos-white: #FFFFFF;
+  --neopos-light-text: #e0e0e0;
+  --neopos-sidebar-hover-bg: #344f6b;
+  --neopos-sidebar-submenu-text: #bdc3c7;
+  --neopos-content-bg: #f4f6f8;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--neopos-content-bg);
+}
+
+.layout {
+    display: flex;
+    height: 100vh;
+}
+
+aside#sidebar {
+    width: 250px;
+    background-color: var(--neopos-dark-grey);
+    color: var(--neopos-light-text);
+    overflow-y: auto;
+    transition: width 0.3s ease;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+aside#sidebar .text-center a.text-decoration-none {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--neopos-sidebar-hover-bg);
+    margin-bottom: 1rem;
+}
+aside#sidebar .text-center img {
+    max-height: 50px !important;
+    margin-bottom: 0.5rem !important;
+}
+aside#sidebar .text-center .brand-text-neopos {
+    color: var(--neopos-white) !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+aside#sidebar .nav-link {
+    color: var(--neopos-light-text);
+    border-radius: 0.375rem;
+    margin-bottom: 0.3rem;
+    padding: 0.6rem 1rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: flex; /* Asegura que esta línea exista si no la tenías */
+    align-items: center; /* Asegura que esta línea exista si no la tenías */
+}
+
+aside#sidebar .nav-link:hover {
+    background-color: var(--neopos-sidebar-hover-bg);
+    color: var(--neopos-white);
+}
+
+aside#sidebar .nav-link.active {
+    background-color: var(--neopos-turquoise);
+    color: var(--neopos-white) !important;
+    font-weight: 500;
+}
+
+aside#sidebar .nav-link.active i.bi {
+    color: var(--neopos-white);
+}
+
+aside#sidebar .nav-link i.bi {
+    margin-right: 0.75rem !important;
+    font-size: 1.1rem;
+    vertical-align: middle;
+}
+
+aside#sidebar .nav-link:hover i.bi,
+aside#sidebar .nav-link.active i.bi {
+    color: var(--neopos-white);
+}
+
+aside#sidebar .collapse .nav-link {
+    padding-left: 2.8rem;
+    font-size: 0.9rem;
+    color: var(--neopos-sidebar-submenu-text, #bdc3c7);
+    background-color: transparent;
+}
+aside#sidebar .collapse .nav-link:hover {
+    color: var(--neopos-white);
+    background-color: var(--neopos-sidebar-hover-bg);
+}
+aside#sidebar .collapse .nav-link.active {
+    color: var(--neopos-turquoise-darker) !important;
+    background-color: rgba(0,0,0,0.1);
+    font-weight: 500;
+}
+aside#sidebar .collapse .nav-link.active .bi {
+    color: var(--neopos-turquoise);
+}
+
+.main-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--neopos-content-bg);
+    transition: margin-left 0.3s ease;
+}
+
+.main-content > nav.navbar {
+    background-color: var(--neopos-white);
+    border-bottom: 1px solid #dee2e6;
+    padding: 0.75rem 1.5rem;
+    z-index: 1000; /* Cambiado de 1030 para que esté debajo del offcanvas si lo usas después */
+    position: sticky; /* Añadido para navbar fija */
+    top: 0; /* Añadido para navbar fija */
+    flex-shrink: 0; /* Para que no se encoja */
+}
+
+.main-content > nav.navbar .nav-link {
+    color: #555;
+}
+.main-content > nav.navbar .nav-link:hover,
+.main-content > nav.navbar .nav-link:focus {
+    color: var(--neopos-turquoise);
+}
+.main-content > nav.navbar .dropdown-toggle span {
+    color: var(--neopos-dark-grey);
+    font-weight: 500;
+}
+
+.main-content > nav.navbar .dropdown-menu {
+    border-radius: 0.375rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+}
+.main-content > nav.navbar .dropdown-header {
+    background-color: var(--neopos-dark-grey);
+    color: var(--neopos-white);
+    padding: 1rem;
+    border-top-left-radius: calc(0.375rem - 1px);
+    border-top-right-radius: calc(0.375rem - 1px);
+}
+.main-content > nav.navbar .dropdown-header img {
+    border: 2px solid var(--neopos-turquoise);
+}
+.main-content > nav.navbar .dropdown-item:active {
+    background-color: var(--neopos-turquoise);
+    color: var(--neopos-white);
+}
+
+.content-wrapper {
+    flex-grow: 1;
+    padding: 1.5rem;
+    overflow-y: auto; /* Para permitir scroll solo en esta área si el contenido es largo */
+}
+
+aside#sidebar.collapsed {
+    width: 80px;
+}
+aside#sidebar.collapsed .text-center .brand-text-neopos,
+aside#sidebar.collapsed .nav-link span,
+aside#sidebar.collapsed .nav-link .bi-chevron-right { /* Si usas chevron para submenús colapsados */
+    display: none;
+}
+aside#sidebar.collapsed .nav-link {
+    justify-content: center;
+}
+aside#sidebar.collapsed .nav-link i.bi { /* Para que el icono no tenga margen cuando está colapsado */
+    margin-right: 0 !important;
+}
+aside#sidebar.collapsed .text-center a.text-decoration-none {
+    padding-bottom: 1rem;
+    border-bottom: none;
+}
+aside#sidebar.collapsed .text-center img { /* Hacer el logo un poco más pequeño en modo colapsado */
+    max-height: 40px !important;
+}
+
+/* Estilos para el botón de toggle de la sidebar (si usas uno con este ID) */
+#toggleSidebar i.bi-list,
+#toggleSidebarDesktop i.bi-list, /* Para el botón de desktop también */
+#toggleSidebarMobile i.bi-list { /* Para el botón de móvil también */
+    font-size: 1.5rem;
+}
+
+/* --- INICIO: Estilos para hacer la tabla de productos más compacta --- */
+#tablaProductosNeoPOS { /* Asegúrate de que tu tabla en productos.ejs tenga id="tablaProductosNeoPOS" */
+    font-size: 0.8rem; /* <<<--- LETRA MÁS PEQUEÑA AQUÍ */
+}
+
+#tablaProductosNeoPOS th,
+#tablaProductosNeoPOS td {
+    vertical-align: middle;
+    padding: 0.4rem 0.5rem; /* Padding reducido para celdas */
+}
+
+.img-table-producto {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+}
+
+#tablaProductosNeoPOS .nombre-producto-tabla {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#tablaProductosNeoPOS td:nth-child(4) { /* Asumiendo que Cód. Barras es la cuarta columna */
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#tablaProductosNeoPOS  .acciones-tabla {
+    min-width: 80px;
+    text-align: center; /* Centrar los botones de acción */
+}
+
+#tablaUsuarioNeoPOS, #tablaVentasNeoPOS {
+    font-size: 0.8rem;
+}
+
+#tablaUsuarioNeoPOS, #tablaVentasNeoPOS  .acciones-tabla {
+    min-width: 80px;
+    text-align: center; /* Centrar los botones de acción */
+}
+#tablaUsuarioNeoPOS, #tablaVentasNeoPOS th,
+#tablaUsuarioNeoPOS, #tablaVentasNeoPOS td {
+    vertical-align: middle;
+    padding: 0.4rem 0.5rem; /* Padding reducido para celdas */
+}
