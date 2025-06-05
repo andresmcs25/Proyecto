@@ -39,14 +39,16 @@
                                         <% ventas.forEach(venta=> { %>
                                             <tr class="text-center">
                                                 <td><%= venta.id_venta %></td>
-                                                <td><%= venta.id_tercero_cliente.nombre_razon_social %></td>
-                                                <td><%= venta.id_usuario_vendedor.nombre_completo %></td>
+                                                <td><%= venta.tercero.nombre_razon_social %></td>
+                                                <td><%= venta.usuario.nombre_completo %></td>
                                                 <td><%= venta.tipo_comprobante %></td>
                                                 <td><%= venta.serie_comprobante %></td>
                                                 <td><%= venta.numero_comprobante %></td>
                                                 <td><%= venta.total_venta_final %></td>
                                                 <td><%= venta.observaciones %></td>
                                                 <td><%= venta.estado_venta %></td>
+                                                <td><a href="/ventas/pdf/<%= venta.id_venta %>" target="_blank" class="btn btn-sm btn-success">📄Factura </a>
+</td>
                                             </tr>
                                             <% }); %>
                                     </tbody>
