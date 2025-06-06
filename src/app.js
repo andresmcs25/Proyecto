@@ -11,6 +11,8 @@ import homeRouter from "./routes/home.routes.js";
 import productoRouter from "./routes/productos.routes.js";
 import usuariosRouter from "./routes/usuarios.routes.js";
 import ventasRouter from "./routes/ventas.routes.js";
+import clientesRouter from "./routes/clientes.routes.js";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,6 +44,7 @@ app.use("/", homeRouter);
 app.use("/", productoRouter);
 app.use("/", usuariosRouter);
 app.use("/", ventasRouter);
+app.use("/", clientesRouter);
 
 
 

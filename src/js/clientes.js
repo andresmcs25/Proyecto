@@ -1,17 +1,19 @@
-async function toggleActivo(button, userId, currentState) {
+async function toggleActivo(button, userTercero, currentState) {
     try {
-        const response = await fetch(`/ventas/${userId}/toggle`, {
+        const response = await fetch(`/clientes/${userTercero}/toggle`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ activo: !currentState })
         });
 
         if (response.ok) {
-            // Cambiar color y texto del botón sin recargar la página
             const newState = !currentState;
             button.className = newState ? "btn btn-sm btn-success" : "btn btn-sm btn-danger";
-            button.textContent = newState ? "Activo" : "Inactivo";
-            button.setAttribute("onclick", `toggleActivo(this, ${userId}, ${newState})`);
+            const icono = button.querySelector("i");
+            if (icono) {
+                icono.className = newState ? "bi bi-check-circle-fill" : "bi bi-x-circle-fill";
+            }
+            button.setAttribute("onclick", `toggleActivo(this, ${userTercero}, ${newState})`);
         } else {
             console.error("Error al cambiar estado del usuario");
         }
@@ -19,9 +21,9 @@ async function toggleActivo(button, userId, currentState) {
         console.error("Error en la solicitud:", error);
     }
 }
-function filtrarVentas() {
+function filtrarClientes() {
     const input = document.getElementById("buscador").value.toLowerCase();
-    const filas = document.querySelectorAll("#tabla-ventas tr");
+    const filas = document.querySelectorAll("#tabla-clientes tr");
 
     filas.forEach(fila => {
         const textoFila = fila.textContent.toLowerCase();

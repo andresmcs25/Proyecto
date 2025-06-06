@@ -19,7 +19,12 @@
 
                             </div>
                             <div class="card shadow-sm">
-                                <table class="table table-hover table-striped table-sm" id="tablaVentasNeoPOS">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="bi bi-search fs-5 me-3"></i>
+                                        <input type="text" id="buscador" class="form-control w-50" placeholder="Buscar ventas..." onkeyup="filtrarVentas()">
+                                    </div>
+                                    <table class="table table-hover table-striped table-sm" id="tablaVentasNeoPOS">
                                     <thead>
                                         <tr class="text-center">
                                             <th>ID</th>
@@ -35,7 +40,7 @@
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tabla-ventas">
                                         <% ventas.forEach(venta=> { %>
                                             <tr class="text-center">
                                                 <td><%= venta.id_venta %></td>
@@ -47,12 +52,12 @@
                                                 <td><%= venta.total_venta_final %></td>
                                                 <td><%= venta.observaciones %></td>
                                                 <td><%= venta.estado_venta %></td>
-                                                <td><a href="/ventas/pdf/<%= venta.id_venta %>" target="_blank" class="btn btn-sm btn-success">📄Factura </a>
-</td>
+                                                <td><a href="/ventas/pdf/<%= venta.id_venta %>" target="_blank" class="btn btn-sm btn-success">📄Factura </a></td>
                                             </tr>
                                             <% }); %>
                                     </tbody>
                                 </table>
+                                </div>                               
                             </div>
                         </div>
                     </div>

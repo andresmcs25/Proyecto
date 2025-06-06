@@ -53,11 +53,11 @@
                 </div>
             </li>    
             <li class="nav-item">
-                <a class="nav-link <% if(activeMenu && activeMenu.ventas) { %> active <% } %>" 
+                <a class="nav-link <% if(activeMenu && activeMenu.ventas || activeMenu.cliente) { %> active <% } %>" 
                 data-bs-toggle="collapse" href="#ventasMenu" role="button">
                 <i class="bi bi-people-fill me-2"></i> <span>Ventas y Clientes</span>
                 </a>
-                <div class="collapse <% if(activeMenu && activeMenu.ventas) { %> show <% } %>" 
+                <div class="collapse <% if(activeMenu && activeMenu.ventas || activeMenu.cliente) { %> show <% } %>" 
                     id="ventasMenu">
                     <ul class="nav flex-column ms-3">
                         <li class="nav-item">
@@ -66,8 +66,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/clientes" class="nav-link <% if(activeMenu && activeMenu.clientes) { %> active <% } %>">
-                                <i class="bi <% if(activeMenu.clientes) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Clientes
+                            <a href="/clientes" class="nav-link <% if(activeMenu && activeMenu.cliente) { %> active <% } %>">
+                                <i class="bi <% if(activeMenu.cliente) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Clientes
                             </a>
                         </li>
                     </ul>
@@ -84,12 +84,6 @@
                             <a href="/usuarios" class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.usuarios) { %>active<% } %>">
                                 <i class="bi <% if(activeMenu.usuarios) { %>bi-circle-fill<% } else { %>bi-circle<% } %> me-2"></i>
                                 Usuarios
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/permisos"
-                                class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.permisos)  { %>active<% } %>">
-                                <i class="bi bi-circle me-2"></i> Permisos
                             </a>
                         </li>
                     </ul>

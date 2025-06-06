@@ -40,3 +40,19 @@ async function eliminarUsuario(userId, button) {
         console.error("Error en la solicitud:", error);
     }
 }
+function filtrarUsuarios() {
+    const input = document.getElementById("buscador").value.toLowerCase();
+    const filas = document.querySelectorAll("#tabla-usuarios tr");
+
+    filas.forEach(fila => {
+        const textoFila = fila.textContent.toLowerCase();
+        if (textoFila.includes(input)) {
+            fila.style.display = "";
+            fila.style.transition = "all 0.3s ease-in-out"; // Efecto suave
+            fila.style.opacity = 1;
+        } else {
+            fila.style.display = "none";
+            fila.style.opacity = 0;
+        }
+    });
+}

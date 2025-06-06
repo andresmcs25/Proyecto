@@ -225,21 +225,32 @@ aside#sidebar.collapsed .text-center img { /* Hacer el logo un poco más pequeñ
     white-space: nowrap;
 }
 
-#tablaProductosNeoPOS  .acciones-tabla {
-    min-width: 80px;
-    text-align: center; /* Centrar los botones de acción */
-}
-
-#tablaUsuarioNeoPOS, #tablaVentasNeoPOS {
+#tablaUsuarioNeoPOS, #tablaVentasNeoPOS, #tablaClientesNeoPOS {
     font-size: 0.8rem;
 }
 
-#tablaUsuarioNeoPOS, #tablaVentasNeoPOS  .acciones-tabla {
+#tablaUsuarioNeoPOS, #tablaVentasNeoPOS, #tablaClientesNeoPOS, #tablaProductosNeoPOS .acciones-tabla {
     min-width: 80px;
     text-align: center; /* Centrar los botones de acción */
 }
-#tablaUsuarioNeoPOS, #tablaVentasNeoPOS th,
-#tablaUsuarioNeoPOS, #tablaVentasNeoPOS td {
+#tablaUsuarioNeoPOS, #tablaVentasNeoPOS, #tablaClientesNeoPOS th,
+#tablaUsuarioNeoPOS, #tablaVentasNeoPOS, #tablaClientesNeoPOS td {
     vertical-align: middle;
     padding: 0.4rem 0.5rem; /* Padding reducido para celdas */
+}
+#buscador {
+    width: 100px; /* Ajusta el tamaño según la tabla */
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--neopos-dark-grey);
+    background-color: var(--neopos-white);
+    color: var(--neopos-dark-grey);
+    transition: all 0.3s ease-in-out;
+}
+
+#buscador:focus {
+    border-color: var(--neopos-turquoise);
+    outline: none;
+    box-shadow: 0 0 5px var(--neopos-turquoise);
 }

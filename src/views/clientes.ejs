@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/_head', { pageTitle: pageTitle }) %>
+</head>
+
+<body>
+    <div class="layout">
+        <%- include('partials/_sidebar', { activeMenu: activeMenu }) %>
+            <div class="main-content">
+                <%- include('partials/_navbar', { user: user }) %>
+                    <div class="content-wrapper p-3">
+                        <div class="container-fluid">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h1 class="h3">
+                                    <%= pageTitle ? pageTitle.split(' - ')[0] : ' Usuarios' %>
+                                </h1>
+
+                            </div>
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="bi bi-search fs-5 me-3"></i>
+                                        <input type="text" id="buscador" class="form-control w-50" placeholder="Buscar cliente..." onkeyup="filtrarClientes()">
+                                    </div>
+                                   <table class="table table-hover table-striped table-sm" id="tablaClientesNeoPOS">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>ID</th>
+                                                <th>Tipo Tercero</th>
+                                                <th>Nombre/Razón Social</th>
+                                                <th>Tipo Documento</th>
+                                                <th>#Documento</th>
+                                                <th>Dirección</th>
+                                                <th>Teléfono</th>
+                                                <th>Correo Electronico</th>
+                                                <th>Fecha Registro</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabla-clientes">
+                                          <% clientes.forEach(tercero=> { %>
+                                            <tr class="text-center">
+                                                <td><%= tercero.id_tercero %></td>
+                                                <td><%= tercero.tipo_tercero %></td>
+                                                <td><%= tercero.nombre_razon_social %></td>
+                                                <td><%= tercero.tipo_documento_identidad %></td>
+                                                <td><%= tercero.numero_documento_identidad %></td>
+                                                <td><%= tercero.direccion %></td>
+                                                <td><%= tercero.telefono_contacto %></td>
+                                                <td><%= tercero.email %></td>
+                                                <td><%= tercero.fecha_registro %></td>
+                                                <td><button class="btn btn-sm <%= tercero.activo ? 'btn-success' : 'btn-danger' %>"
+                                                               onclick="toggleActivo(this, <%= tercero.id_tercero %>, <%= tercero.activo %>)">
+                                                            <i id="icono-<%= tercero.id_tercero %>" class="<%= tercero.activo ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill' %>"></i></button></td>
+                                            </tr>
+                                          <% }); %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+    </div>
+    <%- include('partials/_scripts') %>
+    <script src="/js/clientes.js"></script>
+</body>
+
+</html>
