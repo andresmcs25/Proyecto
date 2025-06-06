@@ -105,6 +105,7 @@
                               <div class="mb-3">
                                 <label for="editar_precio_venta" class="form-label">Precio Venta</label>
                                 <input type="number" class="form-control" id="editar_precio_venta" name="precio_venta_neto" min="0" step="any" required>
+                                <span id="editar_precio_venta_formateado" class="text-muted"></span>
                               </div>
                             </div>
                             <div class="modal-footer">
@@ -134,9 +135,9 @@
                                     </thead>
                                     <tbody>
                                         <% if (typeof articulos !== 'undefined' && articulos && articulos.length > 0) { %>
-                                            <% articulos.forEach(function(articulo) { %>
+                                            <% articulos.forEach(function(articulo, index) { %>
                                                 <tr>
-                                                    <td><%= articulo.id_articulo %></td>
+                                                    <td><%= index + 1%></td>
                                                     <td class="nombre-producto-tabla"><%= articulo.nombre %></td>
                                                     <td><%= articulo.codigo_barra || 'N/A' %></td>
                                                     <td><%= articulo.categoria_articulo.nombre %></td>

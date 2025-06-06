@@ -58,8 +58,8 @@ aside#sidebar .nav-link {
     margin-bottom: 0.3rem;
     padding: 0.6rem 1rem;
     transition: background-color 0.2s ease, color 0.2s ease;
-    display: flex; /* Asegura que esta línea exista si no la tenías */
-    align-items: center; /* Asegura que esta línea exista si no la tenías */
+    display: flex;
+    align-items: center;
 }
 
 aside#sidebar .nav-link:hover {
@@ -120,10 +120,10 @@ aside#sidebar .collapse .nav-link.active .bi {
     background-color: var(--neopos-white);
     border-bottom: 1px solid #dee2e6;
     padding: 0.75rem 1.5rem;
-    z-index: 1000; /* Cambiado de 1030 para que esté debajo del offcanvas si lo usas después */
-    position: sticky; /* Añadido para navbar fija */
-    top: 0; /* Añadido para navbar fija */
-    flex-shrink: 0; /* Para que no se encoja */
+    z-index: 1000;
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
 }
 
 .main-content > nav.navbar .nav-link {
@@ -161,7 +161,7 @@ aside#sidebar .collapse .nav-link.active .bi {
 .content-wrapper {
     flex-grow: 1;
     padding: 1.5rem;
-    overflow-y: auto; /* Para permitir scroll solo en esta área si el contenido es largo */
+    overflow-y: auto;
 }
 
 aside#sidebar.collapsed {
@@ -169,39 +169,37 @@ aside#sidebar.collapsed {
 }
 aside#sidebar.collapsed .text-center .brand-text-neopos,
 aside#sidebar.collapsed .nav-link span,
-aside#sidebar.collapsed .nav-link .bi-chevron-right { /* Si usas chevron para submenús colapsados */
+aside#sidebar.collapsed .nav-link .bi-chevron-right {
     display: none;
 }
 aside#sidebar.collapsed .nav-link {
     justify-content: center;
 }
-aside#sidebar.collapsed .nav-link i.bi { /* Para que el icono no tenga margen cuando está colapsado */
+aside#sidebar.collapsed .nav-link i.bi {
     margin-right: 0 !important;
 }
 aside#sidebar.collapsed .text-center a.text-decoration-none {
     padding-bottom: 1rem;
     border-bottom: none;
 }
-aside#sidebar.collapsed .text-center img { /* Hacer el logo un poco más pequeño en modo colapsado */
+aside#sidebar.collapsed .text-center img {
     max-height: 40px !important;
 }
 
-/* Estilos para el botón de toggle de la sidebar (si usas uno con este ID) */
 #toggleSidebar i.bi-list,
-#toggleSidebarDesktop i.bi-list, /* Para el botón de desktop también */
-#toggleSidebarMobile i.bi-list { /* Para el botón de móvil también */
+#toggleSidebarDesktop i.bi-list,
+#toggleSidebarMobile i.bi-list {
     font-size: 1.5rem;
 }
 
-/* --- INICIO: Estilos para hacer la tabla de productos más compacta --- */
-#tablaProductosNeoPOS { /* Asegúrate de que tu tabla en productos.ejs tenga id="tablaProductosNeoPOS" */
-    font-size: 0.8rem; /* <<<--- LETRA MÁS PEQUEÑA AQUÍ */
+#tablaProductosNeoPOS {
+    font-size: 0.8rem;
 }
 
 #tablaProductosNeoPOS th,
 #tablaProductosNeoPOS td {
     vertical-align: middle;
-    padding: 0.4rem 0.5rem; /* Padding reducido para celdas */
+    padding: 0.4rem 0.5rem;
 }
 
 .img-table-producto {
@@ -218,7 +216,7 @@ aside#sidebar.collapsed .text-center img { /* Hacer el logo un poco más pequeñ
     white-space: nowrap;
 }
 
-#tablaProductosNeoPOS td:nth-child(4) { /* Asumiendo que Cód. Barras es la cuarta columna */
+#tablaProductosNeoPOS td:nth-child(4) {
     max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -227,6 +225,5 @@ aside#sidebar.collapsed .text-center img { /* Hacer el logo un poco más pequeñ
 
 #tablaProductosNeoPOS .acciones-tabla {
     min-width: 80px;
-    text-align: center; /* Centrar los botones de acción */
+    text-align: center;
 }
-/* --- FIN: Estilos para hacer la tabla de productos más compacta --- */

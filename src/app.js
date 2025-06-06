@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import authRouter from "./routes/auth.routes.js";
 import homeRouter from "./routes/home.routes.js";
 import productoRouter from "./routes/productos.routes.js";
+import categoriasRouter from "./routes/categorias.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,6 +39,7 @@ app.use(session({
 app.use("/", authRouter);
 app.use("/", homeRouter);
 app.use("/", productoRouter);
+app.use("/", categoriasRouter);
 
 
 

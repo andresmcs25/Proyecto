@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('partials/_head', { pageTitle: pageTitle }) %>
+</head>
+<body>
+    <div class="layout">
+        <%- include('partials/_sidebar', { activeMenu: activeMenu }) %>
+
+        <div class="main-content">
+            <%- include('partials/_navbar', { user: user }) %>
+
+            <div class="content-wrapper p-3">
+                <!-- Tabla de Categorias -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h1 class="mb-0 h3">Categorías</h1>
+                    <button class="btn btn-sm btn-neo-agregar" data-bs-toggle="modal" data-bs-target="#modalAgregarCategoria">
+                        <i class="bi bi-plus-circle me-1"></i> Nueva Categoría
+                    </button>
+                </div>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped table-sm" id="tablaCategoriasNeoPOS">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Estado</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (typeof categorias !== 'undefined' && categorias && categorias.length > 0) { %>
+                                        <% categorias.forEach(function(cat, index) { %>
+                                            <tr>
+                                                <td><%= index + 1 %></td>
+                                                <td><%= cat.nombre %></td>
+                                                <td><%= cat.descripcion || '' %></td>
+                                                <td>
+                                                    <% if (cat.activa) { %>
+                                                        <span class="badge badge-neo-activo">Activa</span>
+                                                    <% } else { %>
+                                                        <span class="badge bg-danger">Inactiva</span>
+                                                    <% } %>
+                                                </td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-outline-primary me-1" title="Editar"
+                                                        onclick="abrirModalEditarCategoria(<%= cat.id_categoria_articulo %>)">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger" title="Eliminar"
+                                                        onclick="abrirModalEliminarCategoria(<%= cat.id_categoria_articulo %>)">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4">No hay categorías para mostrar.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Agregar Categoría -->
+                <div class="modal fade" id="modalAgregarCategoria" tabindex="-1" aria-labelledby="modalAgregarCategoriaLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="formAgregarCategoria" method="POST" action="/categorias/agregar">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalAgregarCategoriaLabel">Agregar Categoría</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="nombre_categoria" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="nombre_categoria" name="nombre" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="descripcion_categoria" class="form-label">Descripción</label>
+                                        <textarea class="form-control" id="descripcion_categoria" name="descripcion"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="activa_categoria" class="form-label">Estado</label>
+                                        <select class="form-select" id="activa_categoria" name="activa" required>
+                                            <option value="1">Activa</option>
+                                            <option value="0">Inactiva</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-neo-agregar">Agregar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Editar Categoría -->
+                <div class="modal fade" id="modalEditarCategoria" tabindex="-1" aria-labelledby="modalEditarCategoriaLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="formEditarCategoria" method="POST">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalEditarCategoriaLabel">Editar Categoría</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" id="editar_id_categoria" name="id_categoria_articulo">
+                                    <div class="mb-3">
+                                        <label for="editar_nombre_categoria" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="editar_nombre_categoria" name="nombre" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editar_descripcion_categoria" class="form-label">Descripción</label>
+                                        <textarea class="form-control" id="editar_descripcion_categoria" name="descripcion"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editar_activa_categoria" class="form-label">Estado</label>
+                                        <select class="form-select" id="editar_activa_categoria" name="activa" required>
+                                            <option value="1">Activa</option>
+                                            <option value="0">Inactiva</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-neo-agregar">Guardar Cambios</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Eliminar Categoría -->
+                <div class="modal fade" id="modalEliminarCategoria" tabindex="-1" aria-labelledby="modalEliminarCategoriaLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="formEliminarCategoria" method="POST">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalEliminarCategoriaLabel">Eliminar Categoría</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" id="eliminar_id_categoria" name="id_categoria_articulo">
+                                    <p>¿Estás seguro que deseas eliminar la categoría <strong id="eliminar_nombre_categoria"></strong>?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <%- include('partials/_scripts') %>
+    <script>
+        window.categoriasData = <%- JSON.stringify(categorias) %>;
+    </script>
+</body>
+</html>
