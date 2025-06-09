@@ -37,3 +37,35 @@ function filtrarClientes() {
         }
     });
 }
+document.getElementById("formRegiTercero").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    console.log("Enviando datos:", data); // Para debugging
+
+    try {
+        const response = await fetch("/clientes/nuevo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+            alert(result.message);
+            // Cerrar el modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById("modalRegiTercero"));
+            modal.hide();
+            // Recargar la página para mostrar el nuevo usuario
+            window.location.reload();
+        } else {
+            alert("Error: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+        alert("Error de conexión. Intenta nuevamente.");
+    }
+});

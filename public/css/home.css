@@ -239,7 +239,7 @@ aside#sidebar.collapsed .text-center img { /* Hacer el logo un poco más pequeñ
     padding: 0.4rem 0.5rem; /* Padding reducido para celdas */
 }
 #buscador {
-    width: 100px; /* Ajusta el tamaño según la tabla */
+    width: 300px; /* Ajusta el tamaño según la tabla */
     padding: 0.5rem;
     font-size: 0.9rem;
     border-radius: 0.375rem;
@@ -254,3 +254,13 @@ aside#sidebar.collapsed .text-center img { /* Hacer el logo un poco más pequeñ
     outline: none;
     box-shadow: 0 0 5px var(--neopos-turquoise);
 }
+.modal-body {
+  padding: 1rem; /* Puedes ajustar este valor */
+}
+.modal-content {
+  padding: 1; /* Elimina el padding interno del contenido si lo deseas */
+}
+.modal-header, .modal-footer {
+  padding: 0.1rem 1rem; /* Reduce el padding de cabecera y pie */
+}
+

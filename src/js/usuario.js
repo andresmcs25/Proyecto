@@ -7,10 +7,12 @@ async function toggleActivo(button, userId, currentState) {
         });
 
         if (response.ok) {
-            // Cambiar color y texto del botón sin recargar la página
             const newState = !currentState;
             button.className = newState ? "btn btn-sm btn-success" : "btn btn-sm btn-danger";
-            button.textContent = newState ? "Activo" : "Inactivo";
+            const icono = button.querySelector("i");
+            if (icono) {
+                icono.className = newState ? "bi bi-check-circle-fill" : "bi bi-x-circle-fill";
+            }
             button.setAttribute("onclick", `toggleActivo(this, ${userId}, ${newState})`);
         } else {
             console.error("Error al cambiar estado del usuario");
@@ -56,3 +58,37 @@ function filtrarUsuarios() {
         }
     });
 }
+document.getElementById("formCrearUsuario").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    console.log("Enviando datos:", data); // Para debugging
+
+    try {
+        const response = await fetch("/usuarios/nuevo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+            alert(result.message);
+            // Cerrar el modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById("modalCrearUsuario"));
+            modal.hide();
+            // Recargar la página para mostrar el nuevo usuario
+            window.location.reload();
+        } else {
+            alert("Error: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+        alert("Error de conexión. Intenta nuevamente.");
+    }
+});
+
+

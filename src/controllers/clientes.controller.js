@@ -18,7 +18,7 @@ export const renderClientes = async (req, res) => {
 
         const user = {
             nombre: userFound.nombre_completo,
-            rol: userRol.nombre_rol,
+            rol: userFound.rol_usuario.nombre_rol,
         };
 
         const clientes = await prisma.tercero.findMany();
@@ -27,12 +27,18 @@ export const renderClientes = async (req, res) => {
             cliente.fecha_registro = moment(cliente.fecha_registro).format("DD/MM/YYYY HH:mm");
         });
 
+        const tiposTercero = [
+            { tipo_tercero: "Cliente" },
+            { tipo_tercero: "Proveedor" },
+            { tipo_tercero: "Otro" }
+        ];
         
-            res.render("clientes", { 
-            user, 
-            pageTitle: "Clientes - NeoPOS", 
-            activeMenu: { cliente : true },
-            clientes
+        res.render("clientes", {  
+            pageTitle: "Clientes - NeoPOS",
+            user,
+            clientes,
+            tiposTercero,
+            activeMenu: { cliente : true }
         });
     } catch (error) {
         console.error("Error al cargar la página de terceros:", error);
@@ -53,5 +59,68 @@ export const toggleTerceroActivo = async (req, res) => {
     } catch (error) {
         console.error("Error al actualizar el estado:", error);
         res.status(500).json({ error: "Error interno del servidor" });
+    }
+};
+export const crearTercero = async (req, res) => {
+    try {
+        const {
+            tipo_tercero,
+            nombre_razon_social,
+            tipo_documento_identidad,
+            numero_documento_identidad,
+            direccion,
+            telefono_contacto,
+            email
+        } = req.body;
+
+        if (!tipo_tercero || !nombre_razon_social || !tipo_documento_identidad || !numero_documento_identidad || !direccion || !telefono_contacto || !email) {
+            return res.status(400).json({
+                success: false,
+                message: "Faltan campos obligatorios"
+            });
+        }
+
+        const existingTercero = await prisma.tercero.findFirst({
+            where: { numero_documento_identidad: numero_documento_identidad }
+        });
+
+        if (existingTercero) {
+            return res.status(400).json({
+                success: false,
+                message: "Tercero ya existe"
+            });
+        }
+
+        const nuevoTercero = await prisma.tercero.create({
+            data: {
+                tipo_tercero,
+                nombre_razon_social,
+                tipo_documento_identidad,
+                numero_documento_identidad,
+                direccion,
+                telefono_contacto,
+                email
+            }
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Tercero creado con exito",
+            tercero: nuevoTercero
+        });
+    }catch(error){
+        console.error("Error al crear el tercero", error);
+
+        if(error.code === 'P2002'){
+            return res.status(400).json({
+                success: false,
+                message: "Tercero ya existe"
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: "Error interno del servidor" + error.message
+        });
     }
 };
