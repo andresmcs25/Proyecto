@@ -5,7 +5,7 @@
 </head>
 <body>
     <div class="layout">
-        <%- include('partials/_sidebar', { activeMenu: activeMenu }) %>
+        <%- include('partials/_sidebarGlobal', { user: user, activeMenu: activeMenu }) %>
 
         <div class="main-content">
             <%- include('partials/_navbar', { user: user }) %>

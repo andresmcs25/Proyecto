@@ -14,7 +14,8 @@ export const renderHome = async(req, res) => {
 
     const user = {
         nombre: userFound.nombre_completo,
-        rol: userRol.nombre_rol
+        rol: userRol.nombre_rol,
+        id_rol_usuario: userFound.id_rol_usuario
     }
     res.render("home",{
         pageTitle: "Inicio - NeoPOS",

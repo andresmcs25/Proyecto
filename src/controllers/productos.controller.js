@@ -23,6 +23,7 @@ async function getUserData(req) {
       where: { id_usuario: parseInt(userId) },
       select: {
         nombre_completo: true,
+        id_rol_usuario: true,
         rol_usuario: { 
           select: { 
             nombre_rol: true 
@@ -34,7 +35,8 @@ async function getUserData(req) {
     if (userFromDb) {
       userData = {
         nombre: userFromDb.nombre_completo,
-        rol: userFromDb.rol_usuario ? userFromDb.rol_usuario.nombre_rol : 'Rol no definido'
+        rol: userFromDb.rol_usuario ? userFromDb.rol_usuario.nombre_rol : 'Rol no definido',
+        id_rol_usuario: userFromDb.id_rol_usuario
       };
     }
   }

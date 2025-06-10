@@ -1,0 +1,6 @@
+<% if (user && user.id_rol_usuario == 2) { %>
+    <%- include('_sidebarCajero', { activeMenu: activeMenu }) %>
+<% } else if (user && user.id_rol_usuario == 1) { %>
+    <%- include('_sidebar', { activeMenu: activeMenu }) %>
+<% } else { %>
+<% } %>
