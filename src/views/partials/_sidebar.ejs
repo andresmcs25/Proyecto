@@ -29,51 +29,74 @@
                             </a>
                         </li>
                     </ul>
-                </div>
+                </div>                
             </li>
             <li class="nav-item">
-                <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.compras) { %>active<% } %>" data-bs-toggle="collapse" href="#comprasMenu" role="button">
+                    <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.compras) { %>active<% } %>"
+                    data-bs-toggle="collapse" href="#comprasMenu" role="button">
                     <i class="bi bi-cart-check-fill me-2"></i> <span>Compras y Gastos</span>
                 </a>
-                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.compras) { %>show<% } %>" id="comprasMenu">
+                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.compras) { %>show<% } %>"
+                    id="comprasMenu">
                     <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a href="/ingresos" class="nav-link"> <i class="bi bi-circle me-2"></i> Ingresos</a></li>
-                        <li class="nav-item"><a href="/proveedores" class="nav-link"> <i class="bi bi-circle me-2"></i> Proveedores</a></li>
+                        <li class="nav-item"><a href="/ingresos" class="nav-link"> <i
+                                    class="bi bi-circle me-2"></i> Ingresos</a></li>
+                        <li class="nav-item"><a href="/proveedores" class="nav-link"> <i
+                                    class="bi bi-circle me-2"></i> Proveedores</a></li>
                     </ul>
                 </div>
-            </li>
+            </li>    
             <li class="nav-item">
-                <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.ventas) { %>active<% } %>" data-bs-toggle="collapse" href="#ventasMenu" role="button">
-                    <i class="bi bi-people-fill me-2"></i> <span>Ventas y Clientes</span>
+                <a class="nav-link <% if(activeMenu && activeMenu.ventas || activeMenu.cliente) { %> active <% } %>" 
+                data-bs-toggle="collapse" href="#ventasMenu" role="button">
+                <i class="bi bi-people-fill me-2"></i> <span>Ventas y Clientes</span>
                 </a>
-                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.ventas) { %>show<% } %>" id="ventasMenu">
+                <div class="collapse <% if(activeMenu && activeMenu.ventas || activeMenu.cliente) { %> show <% } %>" 
+                    id="ventasMenu">
                     <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a href="/ventas" class="nav-link"> <i class="bi bi-circle me-2"></i> Ventas</a></li>
-                        <li class="nav-item"><a href="/clientes" class="nav-link"> <i class="bi bi-circle me-2"></i> Clientes</a></li>
+                        <li class="nav-item">
+                            <a href="/ventas" class="nav-link <% if(activeMenu && activeMenu.ventas) { %> active <% } %>">
+                                <i class="bi <% if(activeMenu.ventas) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Ventas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/clientes" class="nav-link <% if(activeMenu && activeMenu.cliente) { %> active <% } %>">
+                                <i class="bi <% if(activeMenu.cliente) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Clientes
+                            </a>
+                        </li>
                     </ul>
                 </div>
-            </li>
+            </li>        
             <li class="nav-item">
-                <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.admin) { %>active<% } %>" data-bs-toggle="collapse" href="#adminMenu" role="button">
-                    <i class="bi bi-gear-fill me-2"></i> <span>Administración</span>
+                <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.administracion) { %>active<% } %>"
+                    data-bs-toggle="collapse" href="#administracionMenu" role="button">
+                    <i class="bi bi-box-seam-fill me-2"></i> <span>Administración</span>
                 </a>
-                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.admin) { %>show<% } %>" id="adminMenu">
+                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.administracion) { %>show<% } %>"id="administracionMenu">
                     <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a href="/admin/usuarios" class="nav-link"> <i class="bi bi-circle me-2"></i> Usuarios</a></li>
-                        <li class="nav-item"><a href="/admin/permisos" class="nav-link"> <i class="bi bi-circle me-2"></i> Permisos</a></li>
+                        <li class="nav-item">
+                            <a href="/usuarios" class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.usuarios) { %>active<% } %>">
+                                <i class="bi <% if(activeMenu.usuarios) { %>bi-circle-fill<% } else { %>bi-circle<% } %> me-2"></i>
+                                Usuarios
+                            </a>
+                        </li>
                     </ul>
                 </div>
-            </li>
+            </li>               
             <li class="nav-item">
-                <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.reportes) { %>active<% } %>" data-bs-toggle="collapse" href="#reportesMenu" role="button">
+                    <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.reportes) { %>active<% } %>"
+                    data-bs-toggle="collapse" href="#reportesMenu" role="button">
                     <i class="bi bi-clipboard-data-fill me-2"></i> <span>Reportes</span>
                 </a>
-                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.reportes) { %>show<% } %>" id="reportesMenu">
+                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.reportes) { %>show<% } %>"
+                    id="reportesMenu">
                     <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a href="/reportes/compras" class="nav-link"> <i class="bi bi-circle me-2"></i> Compras</a></li>
-                        <li class="nav-item"><a href="/reportes/ventas" class="nav-link"> <i class="bi bi-circle me-2"></i> Ventas</a></li>
+                        <li class="nav-item"><a href="/compras" class="nav-link"> <i class="bi bi-circle me-2"></i>
+                                Compras</a></li>
+                        <li class="nav-item"><a href="/ventas" class="nav-link"> <i class="bi bi-circle me-2"></i>
+                                Ventas</a></li>
                     </ul>
-                </div>
+                </div>               
             </li>
         </ul>
     </nav>

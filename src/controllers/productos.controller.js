@@ -6,6 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
+
 function formatearNumeroColombiano(numero) {
   const partes = numero.toString().split('.'); // Separa enteros y decimales
   const enteroConPuntos = partes[0]
@@ -24,6 +25,7 @@ async function getUserData(req) {
       select: {
         nombre_completo: true,
         id_rol_usuario: true,
+
         rol_usuario: { 
           select: { 
             nombre_rol: true 
@@ -37,6 +39,7 @@ async function getUserData(req) {
         nombre: userFromDb.nombre_completo,
         rol: userFromDb.rol_usuario ? userFromDb.rol_usuario.nombre_rol : 'Rol no definido',
         id_rol_usuario: userFromDb.id_rol_usuario
+
       };
     }
   }
@@ -71,8 +74,7 @@ export const renderProductos = async (req, res) => {
 
     const categorias = await prisma.categoria_articulo.findMany();
 
-    
-
+    // Formatear precios a formato colombiano
     const newArticules = articulos.map(articulo => {
 
       const newPrice = formatearNumeroColombiano(articulo.precio_venta_neto)
@@ -87,7 +89,6 @@ export const renderProductos = async (req, res) => {
       }      
     })
     
-
     res.render("productos", { 
       pageTitle: "Productos - NeoPOS",
       articulos: newArticules,
@@ -130,7 +131,6 @@ export const crearProducto = async (req, res) => {
 
   if (errores.length > 0) {
     const userData = await getUserData(req);
-
     const categorias = await prisma.categoria_articulo.findMany();
     const articulos = await prisma.articulo.findMany({
       where: { activo: true },

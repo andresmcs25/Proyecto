@@ -1,0 +1,54 @@
+:root {
+  --neopos-dark-grey: #2c3e50;
+  --neopos-turquoise: #1ABC9C;
+  --neopos-turquoise-darker: #16A085;
+  --neopos-white: #FFFFFF;
+  --neopos-light-text: #e0e0e0;
+  --neopos-sidebar-hover-bg: #344f6b;
+  --neopos-sidebar-submenu-text: #bdc3c7;
+  --neopos-content-bg: #f4f6f8;
+}
+
+#logoutModal .modal-content {
+    border-radius: 15px;
+    background-color: var(--neopos-white);
+}
+
+.logout-icon-container {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--neopos-sidebar-hover-bg) 0%, var(--neopos-dark-grey) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(52, 79, 107, 0.5);
+}
+
+#logoutModal .btn {
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+#logoutModal .btn-danger {
+    background: linear-gradient(135deg, var(--neopos-turquoise) 0%, var(--neopos-turquoise-darker) 100%);
+    border: none;
+    box-shadow: 0 4px 15px rgba(22, 160, 133, 0.5);
+}
+
+#logoutModal .btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(22, 160, 133, 0.7);
+}
+
+#logoutModal .btn-light {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+#logoutModal .btn-light:hover {
+    background: #e9ecef;
+    transform: translateY(-1px);
+}

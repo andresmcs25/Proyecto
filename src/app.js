@@ -11,6 +11,9 @@ import homeRouter from "./routes/home.routes.js";
 import productoRouter from "./routes/productos.routes.js";
 import categoriasRouter from "./routes/categorias.routes.js";
 import ingresosRouter from "./routes/ingresos.routes.js";
+import usuariosRouter from "./routes/usuarios.routes.js";
+import ventasRouter from "./routes/ventas.routes.js";
+import clientesRouter from "./routes/clientes.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,6 +45,9 @@ app.use("/", homeRouter);
 app.use("/", productoRouter);
 app.use("/", categoriasRouter);
 app.use("/", ingresosRouter);
+app.use("/", usuariosRouter);
+app.use("/", ventasRouter);
+app.use("/", clientesRouter);
 
 
 

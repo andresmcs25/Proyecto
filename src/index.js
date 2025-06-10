@@ -7,6 +7,7 @@ async function main() {
     console.log("connection has been established successfully");
     app.listen(process.env.PORT || 3000, () => {
       console.log(`Server running on port ${process.env.PORT}`);
+      console.log("http://localhost:4000/login");
     });
   } catch (error) {
     console.log(error);
