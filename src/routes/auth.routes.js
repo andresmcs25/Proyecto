@@ -10,7 +10,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 router.get("/login", (req, res) => {
-
   res.render("login");
 });
 router.post("/login", loginUser);
