@@ -7,6 +7,7 @@ export const renderVentas = async (req, res) => {
 
     const userId = req.session.userId
     
+    
     try {
         // Obtener datos del usuario actual
         const userFound = await prisma.usuario.findUnique({
@@ -21,6 +22,7 @@ export const renderVentas = async (req, res) => {
         const user = {
             nombre: userFound.nombre_completo,
             rol: userRol.nombre_rol,
+            id_rol_usuario: userFound.id_rol_usuario
         };
         
         const ventas = await prisma.venta.findMany({ 

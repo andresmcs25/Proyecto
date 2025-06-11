@@ -1,185 +1,350 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <%- include('partials/_head', { pageTitle: pageTitle }) %>
-</head>
-<body>
+  </head>
+  <body>
     <div class="layout">
-        <%- include('partials/_sidebarGlobal', { user: user, activeMenu: activeMenu }) %>
-        <div class="main-content">
-            <%- include('partials/_navbar', { user: user }) %>
-            <div class="content-wrapper p-3">
-                <div class="container-fluid">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="h3"><%= pageTitle ? pageTitle.split(' - ')[0] : 'Productos' %></h1>
-                        <!-- Botón para abrir el modal -->
-                        <button type="button" class="btn btn-sm btn-neo-agregar" data-bs-toggle="modal" data-bs-target="#modalAgregarProducto">
-                            <i class="bi bi-plus-circle me-1"></i>Añadir Producto
-                        </button>
-                    </div>
-
-                    <!-- Modal para Agregar Producto -->
-                    <div class="modal fade" id="modalAgregarProducto" tabindex="-1" aria-labelledby="modalAgregarProductoLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                          <form id="formAgregarProducto" action="/productos/nuevo" method="POST">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="modalAgregarProductoLabel">Agregar Producto</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                            </div>
-                            <div class="modal-body">
-                              <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" required>
-                              </div>
-                              <div class="mb-3">
-                                <label for="codigo_barra" class="form-label">Código de Barras</label>
-                                <input type="text" class="form-control" id="codigo_barra" name="codigo_barra">
-                              </div>
-                              <div class="mb-3">
-                                <label for="categoria" class="form-label">Categoría</label>
-                                <select class="form-select" id="categoria" name="categoria" required>
-                                  <% if (typeof categorias !== "undefined" && categorias && categorias.length > 0) { %>
-                                    <% categorias.forEach(function(cat) { %>
-                                      <option value="<%= cat.id_categoria_articulo %>"><%= cat.nombre %></option>
-                                    <% }) %>
-                                  <% } else { %>
-                                    <option value="">No hay categorías</option>
-                                  <% } %>
-                                </select>
-                              </div>
-                              <div class="mb-3">
-                                <label for="stock" class="form-label">Stock</label>
-                                <input type="number" class="form-control" id="stock" name="stock_actual" min="0" step="any" required>
-                              </div>
-                              <div class="mb-3">
-                                <label for="precio_venta" class="form-label">Precio Venta</label>
-                                <input type="number" class="form-control" id="precio_venta" name="precio_venta_neto" min="0" step="any" required>
-                                <span id="precio_venta_formateado" class="text-muted"></span>
-                              </div>
-
-                            </div>
-                            <div class="modal-footer">
-                              <button type="submit" class="btn btn-neo-agregar">Guardar Producto</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Modal para Editar Producto -->
-                    <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-labelledby="modalEditarProductoLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                          <form id="formEditarProducto" method="POST">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="modalEditarProductoLabel">Editar Producto</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                            </div>
-                            <div class="modal-body">
-                              <input type="hidden" id="editar_id_articulo" name="id_articulo">
-                              <div class="mb-3">
-                                <label for="editar_nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="editar_nombre" name="nombre" required>
-                              </div>
-                              <div class="mb-3">
-                                <label for="editar_codigo_barra" class="form-label">Código de Barras</label>
-                                <input type="text" class="form-control" id="editar_codigo_barra" name="codigo_barra">
-                              </div>
-                              <div class="mb-3">
-                                <label for="editar_categoria" class="form-label">Categoría</label>
-                                <select class="form-select" id="editar_categoria" name="categoria" required>
-                                  <% if (typeof categorias !== "undefined" && categorias && categorias.length > 0) { %>
-                                    <% categorias.forEach(function(cat) { %>
-                                      <option value="<%= cat.id_categoria_articulo %>"><%= cat.nombre %></option>
-                                    <% }) %>
-                                  <% } else { %>
-                                    <option value="">No hay categorías</option>
-                                  <% } %>
-                                </select>
-                              </div>
-                              <div class="mb-3">
-                                <label for="editar_stock" class="form-label">Stock</label>
-                                <input type="number" class="form-control" id="editar_stock" name="stock_actual" min="0" step="any" required>
-                              </div>
-                              <div class="mb-3">
-                                <label for="editar_precio_venta" class="form-label">Precio Venta</label>
-                                <input type="number" class="form-control" id="editar_precio_venta" name="precio_venta_neto" min="0" step="any" required>
-                                <span id="editar_precio_venta_formateado" class="text-muted"></span>
-                              </div>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="submit" class="btn btn-neo-agregar">Guardar Cambios</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Tabla de Productos -->
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover table-striped table-sm" id="tablaProductosNeoPOS"> 
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Nombre</th>
-                                            <th>Cód. Barras</th>
-                                            <th>Categoría</th>
-                                            <th>Stock</th>
-                                            <th>Precio Venta</th>
-                                            <th>Estado</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% if (typeof articulos !== 'undefined' && articulos && articulos.length > 0) { %>
-                                            <% articulos.forEach(function(articulo, index) { %>
-                                                <tr>
-                                                    <td><%= index + 1%></td>
-                                                    <td class="nombre-producto-tabla"><%= articulo.nombre %></td>
-                                                    <td><%= articulo.codigo_barra || 'N/A' %></td>
-                                                    <td><%= articulo.categoria_articulo.nombre %></td>
-                                                    <td><%= Math.floor(articulo.stock_actual) %></td>
-                                                    <td><%= articulo.precio_venta_neto.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) %></td>
-                                                    <td>
-                                                        <% if (articulo.activo) { %>
-                                                            <span class="badge badge-neo-activo">Activo</span>
-                                                        <% } else { %>
-                                                            <span class="badge bg-danger">Inactivo</span>
-                                                        <% } %>
-                                                    </td>
-                                                    <td class="acciones-tabla">
-                                                        <button type="button" class="btn btn-sm btn-outline-primary me-1" title="Editar"
-                                                          onclick="abrirModalEditar(<%= articulo.id_articulo %>)">
-                                                            <i class="bi bi-pencil-square"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="confirmarEliminacionProducto(<%= articulo.id_articulo %>)">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            <% }); %>
-                                        <% } else { %>
-                                            <tr>
-                                                <td colspan="10" class="text-center py-4">No hay productos para mostrar.</td>
-                                            </tr>
-                                        <% } %>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <%- include('partials/_sidebarGlobal', { user: user, activeMenu:
+      activeMenu }) %>
+      <div class="main-content">
+        <%- include('partials/_navbar', { user: user }) %>
+        <div class="content-wrapper p-3">
+          <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h1 class="h3">
+                <%= pageTitle ? pageTitle.split(' - ')[0] : 'Productos' %>
+              </h1>
+              <!-- Botón para abrir el modal -->
+              <button
+                type="button"
+                class="btn btn-sm btn-neo-agregar"
+                data-bs-toggle="modal"
+                data-bs-target="#modalAgregarProducto"
+              >
+                <i class="bi bi-plus-circle me-1"></i>Añadir Producto
+              </button>
             </div>
+
+            <!-- Modal para Agregar Producto -->
+            <div
+              class="modal fade"
+              id="modalAgregarProducto"
+              tabindex="-1"
+              aria-labelledby="modalAgregarProductoLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <form
+                    id="formAgregarProducto"
+                    action="/productos/nuevo"
+                    method="POST"
+                  >
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalAgregarProductoLabel">
+                        Agregar Producto
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nombre"
+                          name="nombre"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="codigo_barra" class="form-label"
+                          >Código de Barras</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="codigo_barra"
+                          name="codigo_barra"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="categoria" class="form-label"
+                          >Categoría</label
+                        >
+                        <select
+                          class="form-select"
+                          id="categoria"
+                          name="categoria"
+                          required
+                        >
+                          <% if (typeof categorias !== "undefined" && categorias
+                          && categorias.length > 0) { %> <%
+                          categorias.forEach(function(cat) { %>
+                          <option value="<%= cat.id_categoria_articulo %>">
+                            <%= cat.nombre %>
+                          </option>
+                          <% }) %> <% } else { %>
+                          <option value="">No hay categorías</option>
+                          <% } %>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="stock" class="form-label">Stock</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="stock"
+                          name="stock_actual"
+                          min="0"
+                          step="any"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="precio_venta" class="form-label"
+                          >Precio Venta</label
+                        >
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="precio_venta"
+                          name="precio_venta_neto"
+                          min="0"
+                          step="any"
+                          required
+                        />
+                        <span
+                          id="precio_venta_formateado"
+                          class="text-muted"
+                        ></span>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-neo-agregar">
+                        Guardar Producto
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- Modal para Editar Producto -->
+            <div
+              class="modal fade"
+              id="modalEditarProducto"
+              tabindex="-1"
+              aria-labelledby="modalEditarProductoLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <form id="formEditarProducto" method="POST">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalEditarProductoLabel">
+                        Editar Producto
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <input
+                        type="hidden"
+                        id="editar_id_articulo"
+                        name="id_articulo"
+                      />
+                      <div class="mb-3">
+                        <label for="editar_nombre" class="form-label"
+                          >Nombre</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editar_nombre"
+                          name="nombre"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="editar_codigo_barra" class="form-label"
+                          >Código de Barras</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="editar_codigo_barra"
+                          name="codigo_barra"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="editar_categoria" class="form-label"
+                          >Categoría</label
+                        >
+                        <select
+                          class="form-select"
+                          id="editar_categoria"
+                          name="categoria"
+                          required
+                        >
+                          <% if (typeof categorias !== "undefined" && categorias
+                          && categorias.length > 0) { %> <%
+                          categorias.forEach(function(cat) { %>
+                          <option value="<%= cat.id_categoria_articulo %>">
+                            <%= cat.nombre %>
+                          </option>
+                          <% }) %> <% } else { %>
+                          <option value="">No hay categorías</option>
+                          <% } %>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="editar_stock" class="form-label"
+                          >Stock</label
+                        >
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="editar_stock"
+                          name="stock_actual"
+                          min="0"
+                          step="any"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="editar_precio_venta" class="form-label"
+                          >Precio Venta</label
+                        >
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="editar_precio_venta"
+                          name="precio_venta_neto"
+                          min="0"
+                          step="any"
+                          required
+                        />
+                        <span
+                          id="editar_precio_venta_formateado"
+                          class="text-muted"
+                        ></span>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-neo-agregar">
+                        Guardar Cambios
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- Tabla de Productos -->
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table
+                    class="table table-hover table-striped table-sm"
+                    id="tablaProductosNeoPOS"
+                  >
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Cód. Barras</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th>Precio Venta</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (typeof articulos !== 'undefined' && articulos &&
+                      articulos.length > 0) { %> <%
+                      articulos.forEach(function(articulo, index) { %>
+                      <tr>
+                        <td><%= index + 1%></td>
+                        <td class="nombre-producto-tabla">
+                          <%= articulo.nombre %>
+                        </td>
+                        <td><%= articulo.codigo_barra || 'N/A' %></td>
+                        <td><%= articulo.categoria_articulo.nombre %></td>
+                        <td><%= Math.floor(articulo.stock_actual) %></td>
+                        <td>
+                          <%= articulo.precio_venta_neto.toLocaleString('es-CO',
+                          { style: 'currency', currency: 'COP' }) %>
+                        </td>
+                        <td>
+                          <% if (articulo.activo) { %>
+                          <span class="badge badge-neo-activo">Activo</span>
+                          <% } else { %>
+                          <span class="badge bg-danger">Inactivo</span>
+                          <% } %>
+                        </td>
+                        <td class="acciones-tabla">
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-outline-primary me-1"
+                            title="Editar"
+                            onclick="abrirModalEditar(<%= articulo.id_articulo %>)"
+                          >
+                            <i class="bi bi-pencil-square"></i>
+                          </button>
+                          <button
+                            class="btn btn-sm btn-outline-danger"
+                            title="Eliminar"
+                            onclick="confirmarEliminacionProducto(<%= articulo.id_articulo %>)"
+                          >
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <% }); %> <% } else { %>
+                      <tr>
+                        <td colspan="10" class="text-center py-4">
+                          No hay productos para mostrar.
+                        </td>
+                      </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
     <%- include('partials/_scripts') %>
 
     <script>
-        window.articulosData = <%- JSON.stringify(articulos) %>;
+      window.articulosData = <%- JSON.stringify(articulos) %>;
     </script>
-    <form id="formEliminarProducto" method="POST" style="display:none;"></form>
-</body>
+    <form id="formEliminarProducto" method="POST" style="display: none"></form>
+  </body>
 </html>

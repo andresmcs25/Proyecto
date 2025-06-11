@@ -4,6 +4,11 @@ import moment from "moment";
 export const renderClientes = async (req, res) => {
 
     const userId = req.session.userId
+
+    async function getUserData(req) {
+    const userId = req.session.userId;
+    let userData = null;
+}
     
     try {
         // Obtener datos del usuario actual
@@ -18,7 +23,8 @@ export const renderClientes = async (req, res) => {
 
         const user = {
             nombre: userFound.nombre_completo,
-            rol: userFound.rol_usuario.nombre_rol,
+            rol: userRol.nombre_rol,
+            id_rol_usuario: userFound.id_rol_usuario
         };
 
         const clientes = await prisma.tercero.findMany();
@@ -38,7 +44,7 @@ export const renderClientes = async (req, res) => {
             user,
             clientes,
             tiposTercero,
-            activeMenu: { cliente : true }
+            activeMenu: { clientes: true },
         });
     } catch (error) {
         console.error("Error al cargar la página de terceros:", error);
@@ -123,4 +129,4 @@ export const crearTercero = async (req, res) => {
             message: "Error interno del servidor" + error.message
         });
     }
-};
+}

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('partials/_head', { pageTitle: pageTitle }) %>
+</head>
+<body>
+    <div class="layout">
+          <%- include('partials/_sidebarGlobal', { user: user, activeMenu: activeMenu }) %>
+        <div class="main-content">
+            <%- include('partials/_navbar', { user: user }) %>
+            <div class="content-wrapper p-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h1 class="h4 mb-3">Proveedores</h1>
+                    <button class="btn btn-sm btn-neo-agregar" data-bs-toggle="modal" data-bs-target="#modalAgregarProveedor">
+                        <i class="bi bi-plus-circle me-1"></i> Nuevo Proveedor
+                    </button>
+                </div>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nombre/Razón Social</th>
+                                        <th>Tipo Doc.</th> <!-- Nueva columna -->
+                                        <th>Documento</th>
+                                        <th>Teléfono</th>
+                                        <th>Email</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (proveedores && proveedores.length > 0) { %>
+                                        <% proveedores.forEach(function(prov, index) { %>
+                                            <tr>
+                                                <td><%= index + 1 %></td>
+                                                <td><%= prov.nombre_razon_social %></td>
+                                                <td><%= prov.tipo_documento_identidad %></td> <!-- Mostrar tipo de documento -->
+                                                <td><%= prov.numero_documento_identidad %></td>
+                                                <td><%= prov.telefono_contacto %></td>
+                                                <td><%= prov.email %></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary me-1" title="Editar"
+                                                        onclick="abrirModalEditarProveedor(<%= prov.id_tercero %>)">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger" title="Eliminar"
+                                                        onclick="abrirModalEliminarProveedor(<%= prov.id_tercero %>)">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="7" class="text-center py-4">No hay proveedores para mostrar.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Agregar Proveedor -->
+    <div class="modal fade" id="modalAgregarProveedor" tabindex="-1" aria-labelledby="modalAgregarProveedorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="formAgregarProveedor" method="POST" action="/proveedores/agregar">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAgregarProveedorLabel">Agregar Proveedor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="nombre_razon_social" class="form-label">Nombre/Razón Social</label>
+                            <input type="text" class="form-control" id="nombre_razon_social" name="nombre_razon_social" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tipo_documento_identidad" class="form-label">Tipo de Documento</label>
+                            <select class="form-select" id="tipo_documento_identidad" name="tipo_documento_identidad" required>
+                                <option value="">Seleccione...</option>
+                                <option value="CC">CC</option>
+                                <option value="NIT">NIT</option>
+                                <option value="RUT">RUT</option>
+                                <option value="NUIP">NUIP</option>
+                                <option value="CE">CE</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="numero_documento_identidad" class="form-label">Documento</label>
+                            <input type="text" class="form-control" id="numero_documento_identidad" name="numero_documento_identidad" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" name="direccion">
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono_contacto" class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" id="telefono_contacto" name="telefono_contacto">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-neo-agregar">Agregar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Proveedor -->
+    <div class="modal fade" id="modalEditarProveedor" tabindex="-1" aria-labelledby="modalEditarProveedorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="formEditarProveedor" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarProveedorLabel">Editar Proveedor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="editar_id_tercero" name="id_tercero">
+                        <div class="mb-3">
+                            <label for="editar_nombre_razon_social" class="form-label">Nombre/Razón Social</label>
+                            <input type="text" class="form-control" id="editar_nombre_razon_social" name="nombre_razon_social" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_tipo_documento_identidad" class="form-label">Tipo de Documento</label>
+                            <select class="form-select" id="editar_tipo_documento_identidad" name="tipo_documento_identidad" required>
+                                <option value="">Seleccione...</option>
+                                <option value="CC">CC</option>
+                                <option value="NIT">NIT</option>
+                                <option value="RUT">RUT</option>
+                                <option value="NUIP">NUIP</option>
+                                <option value="CE">CE</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_numero_documento_identidad" class="form-label">Documento</label>
+                            <input type="text" class="form-control" id="editar_numero_documento_identidad" name="numero_documento_identidad" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="editar_direccion" name="direccion">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_telefono_contacto" class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" id="editar_telefono_contacto" name="telefono_contacto">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editar_email" name="email">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-neo-agregar">Guardar Cambios</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Eliminar Proveedor -->
+    <div class="modal fade" id="modalEliminarProveedor" tabindex="-1" aria-labelledby="modalEliminarProveedorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="formEliminarProveedor" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEliminarProveedorLabel">Eliminar Proveedor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="eliminar_id_tercero" name="id_tercero">
+                        <p>¿Estás seguro que deseas eliminar el proveedor <strong id="eliminar_nombre_razon_social"></strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Exponer los proveedores en JS
+        window.proveedoresData = <%- JSON.stringify(proveedores) %>;
+
+        function abrirModalEditarProveedor(id) {
+            const prov = window.proveedoresData.find(p => p.id_tercero === id);
+            if (!prov) return;
+            document.getElementById('editar_id_tercero').value = prov.id_tercero;
+            document.getElementById('editar_nombre_razon_social').value = prov.nombre_razon_social;
+            document.getElementById('editar_tipo_documento_identidad').value = prov.tipo_documento_identidad || '';
+            document.getElementById('editar_numero_documento_identidad').value = prov.numero_documento_identidad;
+            document.getElementById('editar_direccion').value = prov.direccion || '';
+            document.getElementById('editar_telefono_contacto').value = prov.telefono_contacto || '';
+            document.getElementById('editar_email').value = prov.email || '';
+            document.getElementById('formEditarProveedor').action = `/proveedores/editar/${prov.id_tercero}`;
+            var modal = new bootstrap.Modal(document.getElementById('modalEditarProveedor'));
+            modal.show();
+        }
+
+        function abrirModalEliminarProveedor(id) {
+            const prov = window.proveedoresData.find(p => p.id_tercero === id);
+            if (!prov) return;
+            document.getElementById('eliminar_id_tercero').value = prov.id_tercero;
+            document.getElementById('eliminar_nombre_razon_social').textContent = prov.nombre_razon_social;
+            document.getElementById('formEliminarProveedor').action = `/proveedores/eliminar/${prov.id_tercero}`;
+            var modal = new bootstrap.Modal(document.getElementById('modalEliminarProveedor'));
+            modal.show();
+        }
+    </script>
+    <%- include('partials/_scripts') %>
+</body>
+</html>

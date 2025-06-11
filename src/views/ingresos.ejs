@@ -1,16 +1,252 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <%- include('partials/_head', { pageTitle: pageTitle }) %>
-</head>
-<body>
+  </head>
+  <body>
     <div class="layout">
-        <%- include('partials/_sidebarGlobal', { user: user, activeMenu: activeMenu }) %>
-        <div class="main-content">
-            <%- include('partials/_navbar', { user: user }) %>
-            
+      <%- include('partials/_sidebarGlobal', { user: user, activeMenu:
+      activeMenu }) %>
+      <div class="main-content">
+        <%- include('partials/_navbar', { user: user }) %>
+        <div class="content-wrapper p-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="h4 mb-3">Compras</h1>
+            <!-- Botón para abrir el modal -->
+            <button
+              type="button"
+              class="btn btn-sm btn-neo-agregar"
+              data-bs-toggle="modal"
+              data-bs-target="#modalAgregarProducto"
+            >
+              <i class="bi bi-plus-circle me-1"></i>Añadir Compra
+            </button>
+          </div>
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover table-striped table-sm">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Proveedor</th>
+                      <th>Usuario</th>
+                      <th>Fecha</th>
+                      <th>Total</th>
+                      <th>Observación</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (compras && compras.length > 0) { %> <%
+                    compras.forEach(function(compra, index) { %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><%= compra.tercero.nombre_razon_social %></td>
+                      <td><%= compra.usuario.nombre_completo %></td>
+                      <td><%= compra.fecha_hora_compra.toLocaleDateString('es-CO') %></td>
+                      <td><%= compra.total_compra_final %></td>
+                      <td><%= compra.observaciones %></td>
+                      <td>
+                        <% if (compra.estado_compra === 'Recibida') { %>
+                          <span class="badge bg-success">Recibida</span>
+                        <% } else { %>
+                          <span class="badge bg-danger"><%= compra.estado_compra %></span>
+                        <% } %>
+                      </td>
+                    </tr>
+                    <% }); %> <% } else { %>
+                    <tr>
+                      <td colspan="7" class="text-center py-4">
+                        No hay compras para mostrar.
+                      </td>
+                    </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+
+<div class="modal fade" id="modalAgregarProducto" tabindex="-1" aria-labelledby="modalAgregarProductoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="formAgregarCompra" method="POST" action="/ingresos/agregar">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarProductoLabel">Registrar Compra</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="proveedor" class="form-label">Proveedor</label>
+            <select class="form-select" id="proveedor" name="id_tercero" required>
+              <option value="">Seleccione un proveedor</option>
+              <% if (proveedores && proveedores.length > 0) { %>
+                <% proveedores.forEach(function(prov) { %>
+                  <option value="<%= prov.id_tercero %>"><%= prov.nombre_razon_social %></option>
+                <% }); %>
+              <% } %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input type="date" class="form-control" id="fecha" name="fecha_hora_compra" required>
+          </div>
+          <div class="mb-3">
+            <label for="total" class="form-label">Total</label>
+            <input type="number" class="form-control" id="total" name="total_compra_final" min="0" step="any" required>
+          </div>
+          <div class="mb-3">
+            <label for="observacion" class="form-label">Observación</label>
+            <textarea class="form-control" id="observacion" name="observacion"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="estado" class="form-label">Estado</label>
+            <select class="form-select" id="estado" name="estado_compra" required>
+              <option value="Recibida">Recibida</option>
+              <option value="Anulada">Anulada</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="tipo_comprobante" class="form-label">Tipo de Comprobante</label>
+            <select class="form-select" id="tipo_comprobante" name="tipo_comprobante" required>
+              <option value="">Seleccione...</option>
+              <option value="Factura">Factura</option>
+              <option value="Remisión">Remisión</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="numero_comprobante" class="form-label">Número de Comprobante</label>
+            <input type="text" class="form-control" id="numero_comprobante" name="numero_comprobante" required>
+          </div>
+
+          <!-- Selección y agregado de artículos -->
+          <div class="mb-3 border rounded p-2">
+            <div class="row g-2 align-items-end">
+              <div class="col-md-5">
+                <label class="form-label">Artículo</label>
+                <select class="form-select" id="selectArticulo">
+                  <option value="">Seleccione...</option>
+                  <% articulos.forEach(function(art) { %>
+                    <option value="<%= art.id_articulo %>"><%= art.nombre %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Cantidad</label>
+                <input type="number" class="form-control" id="inputCantidad" min="1">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Precio Unitario</label>
+                <input type="number" class="form-control" id="inputPrecio" min="0" step="any">
+              </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-success w-100" onclick="agregarDetalleCompra()">Agregar</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla de artículos agregados -->
+          <div class="table-responsive mb-3">
+            <table class="table table-bordered table-sm" id="tablaDetalleCompra">
+              <thead>
+                <tr>
+                  <th>Artículo</th>
+                  <th>Cantidad</th>
+                  <th>Precio Unitario</th>
+                  <th>Subtotal</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <!-- Campo oculto para enviar los detalles -->
+          <input type="hidden" name="detalles" id="inputDetallesCompra">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-neo-agregar">Guardar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
     <%- include('partials/_scripts') %>
-</body>
+    <script>
+  // Array para los detalles de la compra
+  let detallesCompra = [];
+
+  function agregarDetalleCompra() {
+    const idArticulo = document.getElementById('selectArticulo').value;
+    const nombreArticulo = document.getElementById('selectArticulo').selectedOptions[0]?.text;
+    const cantidad = parseInt(document.getElementById('inputCantidad').value);
+    const precio = parseFloat(document.getElementById('inputPrecio').value);
+
+    if (!idArticulo || !cantidad || !precio) {
+      alert('Completa todos los campos del artículo');
+      return;
+    }
+
+    // Verifica si ya existe el artículo en la lista
+    const existe = detallesCompra.find(det => det.id_articulo == idArticulo);
+    if (existe) {
+      alert('Este artículo ya fue agregado');
+      return;
+    }
+
+    detallesCompra.push({
+      id_articulo: idArticulo,
+      nombre: nombreArticulo,
+      cantidad,
+      precio_compra_unitario_neto: precio // <-- nombre correcto según tu base de datos
+    });
+    renderDetalleCompra();
+    // Limpia los campos
+    document.getElementById('selectArticulo').value = '';
+    document.getElementById('inputCantidad').value = '';
+    document.getElementById('inputPrecio').value = '';
+  }
+
+  function eliminarDetalleCompra(idx) {
+    detallesCompra.splice(idx, 1);
+    renderDetalleCompra();
+  }
+
+  function renderDetalleCompra() {
+    const tbody = document.querySelector('#tablaDetalleCompra tbody');
+    tbody.innerHTML = '';
+    detallesCompra.forEach((det, idx) => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${det.nombre}</td>
+          <td>${det.cantidad}</td>
+          <td>${det.precio_compra_unitario_neto}</td>
+          <td>${(det.cantidad * det.precio_compra_unitario_neto).toLocaleString('es-CO', {style:'currency', currency:'COP'})}</td>
+          <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalleCompra(${idx})">Quitar</button></td>
+        </tr>
+      `;
+    });
+    document.getElementById('inputDetallesCompra').value = JSON.stringify(detallesCompra);
+  }
+
+  // Limpia los detalles al cerrar el modal (opcional)
+  document.getElementById('modalAgregarProducto').addEventListener('hidden.bs.modal', function () {
+    detallesCompra = [];
+    renderDetalleCompra();
+  });
+
+  // Validación antes de enviar el formulario
+  document.getElementById('formAgregarCompra').addEventListener('submit', function(e) {
+    if (detallesCompra.length === 0) {
+      e.preventDefault();
+      alert('Agrega al menos un artículo a la compra');
+    }
+  });
+</script>
+  </body>
 </html>

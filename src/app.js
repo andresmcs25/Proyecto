@@ -14,6 +14,7 @@ import ingresosRouter from "./routes/ingresos.routes.js";
 import usuariosRouter from "./routes/usuarios.routes.js";
 import ventasRouter from "./routes/ventas.routes.js";
 import clientesRouter from "./routes/clientes.routes.js";
+import proveedoresRouter from "./routes/proveedores.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,7 +49,7 @@ app.use("/", ingresosRouter);
 app.use("/", usuariosRouter);
 app.use("/", ventasRouter);
 app.use("/", clientesRouter);
-
+app.use("/", proveedoresRouter);
 
 
 

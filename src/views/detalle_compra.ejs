@@ -1,0 +1,29 @@
+<h1>Factura de Compra #<%= compra.id_compra %></h1>
+<p>Proveedor: <%= compra.tercero.nombre_razon_social %></p>
+<p>Fecha: <%= compra.fecha_hora_compra.toLocaleDateString('es-CO') %></p>
+<p>Comprobante: <%= compra.tipo_comprobante %> - <%= compra.numero_comprobante %></p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Artículo</th>
+      <th>Cantidad</th>
+      <th>Precio Unitario</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% compra.detalle_compra.forEach(det => { %>
+      <tr>
+        <td><%= det.articulo.nombre %></td>
+        <td><%= det.cantidad %></td>
+        <td>
+          <%= det.precio_compra_unitario_neto.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) %>
+        </td>
+        <td>
+          <%= det.subtotal_linea_neto.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+<p>Total: <%= compra.total_compra_final %></p>
