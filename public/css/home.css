@@ -192,12 +192,12 @@ aside#sidebar.collapsed .text-center img {
     font-size: 1.5rem;
 }
 
-#tablaProductosNeoPOS {
+#tablaProductosNeoPOS, #tablaCategoriasNeoPOS, #tablaIngresosNeoPOS, #tablaProvedoresNeoPOS, #tablaVentasNeoPOS, #tablaClientesNeoPOS, #tablaUsuarioNeoPOS {
     font-size: 0.8rem;
 }
 
-#tablaProductosNeoPOS th,
-#tablaProductosNeoPOS td {
+#tablaProductosNeoPOS th, #tablaCategoriasNeoPOS th,#tablaIngresosNeoPOS th, #tablaProvedoresNeoPOS th, #tablaVentasNeoPOS th, #tablaClientesNeoPOS th, #tablaUsuarioNeoPOS th,
+#tablaProductosNeoPOS td, #tablaCategoriasNeoPOS td, #tablaIngresosNeoPOS td, #tablaProvedoresNeoPOS td, #tablaVentasNeoPOS td, #tablaClientesNeoPOS td, #tablaUsuarioNeoPOS td {
     vertical-align: middle;
     padding: 0.4rem 0.5rem;
 }
@@ -223,7 +223,33 @@ aside#sidebar.collapsed .text-center img {
     white-space: nowrap;
 }
 
-#tablaProductosNeoPOS .acciones-tabla {
+#tablaProductosNeoPOS, #tablaCategoriasNeoPOS, #tablaIngresosNeoPOS,#tablaProvedoresNeoPOS, #tablaVentasNeoPOS, #tablaClientesNeoPOS, #tablaUsuarioNeoPOS .acciones-tabla {
     min-width: 80px;
     text-align: center;
+}
+
+#buscador {
+    width: 300px;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--neopos-dark-grey);
+    background-color: var(--neopos-white);
+    color: var(--neopos-dark-grey);
+    transition: all 0.3s ease-in-out;
+}
+
+#buscador:focus {
+    border-color: var(--neopos-turquoise);
+    outline: none;
+    box-shadow: 0 0 5px var(--neopos-turquoise);
+}
+.modal-body {
+  padding: 1rem;
+}
+.modal-content {
+  padding: 1;
+}
+.modal-header, .modal-footer {
+  padding: 0.1rem 1rem;
 }

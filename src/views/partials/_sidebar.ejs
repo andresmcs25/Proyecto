@@ -13,45 +13,45 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.inventario) { %>active<% } %>" data-bs-toggle="collapse" href="#inventarioMenu" role="button">
+                <a class="nav-link <% if(activeMenu && activeMenu.productos || activeMenu.categorias) { %> active <% } %>"" data-bs-toggle="collapse" href="#inventarioMenu" role="button">
                     <i class="bi bi-box-seam-fill me-2"></i> <span>Inventario</span>
                 </a>
-                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.inventario) { %>show<% } %>" id="inventarioMenu">
+                <div class="collapse <% if(activeMenu && activeMenu.productos || activeMenu.categorias) { %> show <% } %>"" id="inventarioMenu">
                     <ul class="nav flex-column ms-3">
                         <li class="nav-item">
-                            <a href="/productos" class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.productos) { %>active<% } %>">
-                                <i class="bi bi-circle me-2"></i> Productos
+                            <a href="/productos" class="nav-link <% if(activeMenu && activeMenu.productos) { %> active <% } %>">
+                                <i class="bi <% if(activeMenu.productos) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Productos
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/categorias" class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.categorias) { %>active<% } %>">
-                                <i class="bi bi-circle me-2"></i> Categorías
+                            <a href="/categorias" class="nav-link <% if(activeMenu && activeMenu.categorias) { %> active <% } %>">
+                                <i class="bi <% if(activeMenu.categorias) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Categorías
                             </a>
                         </li>
                     </ul>
                 </div>                
             </li>
             <li class="nav-item">
-                    <a class="nav-link <% if(typeof activeMenu !== 'undefined' && activeMenu.compras) { %>active<% } %>"
+                    <a class="nav-link <% if(activeMenu && activeMenu.ingresos || activeMenu.proveedores) { %> active <% } %>"
                     data-bs-toggle="collapse" href="#comprasMenu" role="button">
                     <i class="bi bi-cart-check-fill me-2"></i> <span>Compras y Gastos</span>
                 </a>
-                <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.compras) { %>show<% } %>"
+                <div class="collapse <% if(activeMenu && activeMenu.ingresos || activeMenu.proveedores) { %> show <% } %>"
                     id="comprasMenu">
                     <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a href="/ingresos" class="nav-link"> <i
-                                    class="bi bi-circle me-2"></i> Ingresos</a></li>
-                        <li class="nav-item"><a href="/proveedores" class="nav-link"> <i
-                                    class="bi bi-circle me-2"></i> Proveedores</a></li>
+                        <li class="nav-item"><a href="/ingresos" class="nav-link <% if(activeMenu && activeMenu.ingresos) { %> active <% } %>"> <i
+                                    class="bi <% if(activeMenu.ingresos) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Ingresos</a></li>
+                        <li class="nav-item"><a href="/proveedores" class="nav-link <% if(activeMenu && activeMenu.proveedores) { %> active <% } %>"> <i
+                                    class="bi <% if(activeMenu.proveedores) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Proveedores</a></li>
                     </ul>
                 </div>
             </li>    
             <li class="nav-item">
-                <a class="nav-link <% if(activeMenu && activeMenu.ventas || activeMenu.cliente) { %> active <% } %>" 
+                <a class="nav-link <% if(activeMenu && activeMenu.ventas || activeMenu.clientes) { %> active <% } %>" 
                 data-bs-toggle="collapse" href="#ventasMenu" role="button">
                 <i class="bi bi-people-fill me-2"></i> <span>Ventas y Clientes</span>
                 </a>
-                <div class="collapse <% if(activeMenu && activeMenu.ventas || activeMenu.cliente) { %> show <% } %>" 
+                <div class="collapse <% if(activeMenu && activeMenu.ventas || activeMenu.clientes) { %> show <% } %>" 
                     id="ventasMenu">
                     <ul class="nav flex-column ms-3">
                         <li class="nav-item">
@@ -60,8 +60,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/clientes" class="nav-link <% if(activeMenu && activeMenu.cliente) { %> active <% } %>">
-                                <i class="bi <% if(activeMenu.cliente) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Clientes
+                            <a href="/clientes" class="nav-link <% if(activeMenu && activeMenu.clientes) { %> active <% } %>">
+                                <i class="bi <% if(activeMenu.clientes) { %> bi-circle-fill <% } else { %> bi-circle <% } %> me-2"></i> Clientes
                             </a>
                         </li>
                     </ul>
@@ -91,9 +91,9 @@
                 <div class="collapse <% if(typeof activeMenu !== 'undefined' && activeMenu.reportes) { %>show<% } %>"
                     id="reportesMenu">
                     <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a href="/compras" class="nav-link"> <i class="bi bi-circle me-2"></i>
+                        <li class="nav-item"><a href="/rcompras" class="nav-link"> <i class="bi bi-circle me-2"></i>
                                 Compras</a></li>
-                        <li class="nav-item"><a href="/ventas" class="nav-link"> <i class="bi bi-circle me-2"></i>
+                        <li class="nav-item"><a href="/rventas" class="nav-link"> <i class="bi bi-circle me-2"></i>
                                 Ventas</a></li>
                     </ul>
                 </div>               

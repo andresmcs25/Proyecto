@@ -75,8 +75,12 @@ export const logoutUser = async (req, res) => {
 
             res.clearCookie('connect.sid');
             
-            res.redirect("login");
+            res.status(200).json({ 
+                success: true,
+                message: "Cerrando sesión...",
+                redirectTo: "/login" 
             });
+        });
 
     } catch (error) {
         console.error("Error en logout:", error);

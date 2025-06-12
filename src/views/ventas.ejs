@@ -37,7 +37,6 @@
                                                     <th>Observaciones</th>
                                                     <th>Estado</th>
                                                     <th>DescargarFactura</th>
-                                                    <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tabla-ventas">
@@ -52,7 +51,7 @@
                                                         <td><%= venta.total_venta_final %></td>
                                                         <td><%= venta.observaciones %></td>
                                                         <td><%= venta.estado_venta %></td>
-                                                        <td><a href="/ventas/pdf/<%= venta.id_venta %>" target="_blank" class="btn btn-sm btn-success">📄Factura </a></td>
+                                                        <td><a href="/ventas/pdf/<%= venta.id_venta %>" target="_blank" class="btn btn-sm btn-neo-agregar">📄Factura </a></td>
                                                     </tr>
                                                     <% }); %>
                                             </tbody>
