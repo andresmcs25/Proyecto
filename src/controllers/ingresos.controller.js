@@ -96,6 +96,7 @@ export const crearCompra = async (req, res) => {
           subtotal_linea_neto: cantidad * precioUnitario,
         },
       });
+      
       // Actualizar stock del artículo
       await prisma.articulo.update({
         where: { id_articulo: parseInt(det.id_articulo) },
@@ -131,11 +132,10 @@ export const renderDetalleCompra = async (req, res) => {
 };
 
 function formatearNumeroColombiano(numero) {
-  const partes = numero.toString().split("."); // Separa enteros y decimales
+  const partes = numero.toString().split("."); 
   const enteroConPuntos = partes[0].replace(
     /\B(?=(\d{3})+(?!\d))/g,
     "."
-  ); // Inserta puntos
-  // Si no quieres decimales, no agregues los decimales
-  return enteroConPuntos;
+  ); 
+  return `$ ${enteroConPuntos}`;
 }

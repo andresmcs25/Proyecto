@@ -1,6 +1,6 @@
 import prisma from "../utils/prisma.js";
 
-// Renderizar la vista de categorías (ya lo tienes)
+// Renderizar la vista de categorías
 export const renderCategorias = async (req, res) => {
     const userId = req.session.userId;
 
@@ -67,16 +67,18 @@ export const editarCategoria = async (req, res) => {
     }
 };
 
-// Eliminar categoría
-export const eliminarCategoria = async (req, res) => {
-    const { id } = req.params;
-    try {
-        await prisma.categoria_articulo.delete({
-            where: { id_categoria_articulo: parseInt(id) }
-        });
-        res.redirect("/categorias");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error al eliminar la categoría");
-    }
+export const activarCategoria = async (req, res) => {
+  await prisma.categoria_articulo.update({
+    where: { id_categoria_articulo: parseInt(req.params.id) },
+    data: { activa: true }
+  });
+  res.redirect('/categorias');
+};
+
+export const desactivarCategoria = async (req, res) => {
+  await prisma.categoria_articulo.update({
+    where: { id_categoria_articulo: parseInt(req.params.id) },
+    data: { activa: false }
+  });
+  res.redirect('/categorias');
 };

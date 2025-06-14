@@ -20,3 +20,23 @@
   color: var(--neopos-white) !important;
 }
 
+.btn-neopos-activar {
+  background-color: var(--neopos-turquoise);
+  color: var(--neopos-white);
+  border: none;
+}
+.btn-neopos-activar:hover {
+  background-color: var(--neopos-turquoise-darker);
+  color: var(--neopos-white);
+}
+
+.btn-neopos-desactivar {
+  background-color: var(--neopos-turquoise-darker);
+  color: var(--neopos-white);
+  border: none;
+}
+.btn-neopos-desactivar:hover {
+  background-color: #1a242f;
+  color: var(--neopos-white);
+}
+

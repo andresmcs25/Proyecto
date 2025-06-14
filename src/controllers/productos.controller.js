@@ -8,11 +8,11 @@ const __dirname = path.dirname(__filename);
 
 
 function formatearNumeroColombiano(numero) {
-  const partes = numero.toString().split('.'); // Separa enteros y decimales
+  const partes = numero.toString().split('.');
   const enteroConPuntos = partes[0]
-    .replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Inserta puntos
+    .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   const decimales = partes[1] ? ',' + partes[1] : '';
-  return enteroConPuntos + decimales;
+  return `$ ${enteroConPuntos}${decimales}`;
 }
 
 async function getUserData(req) {
@@ -74,7 +74,6 @@ export const renderProductos = async (req, res) => {
 
     const categorias = await prisma.categoria_articulo.findMany();
 
-    // Formatear precios a formato colombiano
     const newArticules = articulos.map(articulo => {
 
       const newPrice = formatearNumeroColombiano(articulo.precio_venta_neto)
@@ -207,7 +206,6 @@ export const editarProducto = async (req, res) => {
   }
 
   if (errores.length > 0) {
-    // Si hay errores, recarga la página con los mensajes
     const userData = await getUserData(req);
     const categorias = await prisma.categoria_articulo.findMany();
     const articulos = await prisma.articulo.findMany({
@@ -255,15 +253,18 @@ export const editarProducto = async (req, res) => {
     res.status(500).send('Error al editar el producto');
   }
 };
-export const eliminarProducto = async (req, res) => {
-  const { id } = req.params;
-  try {
-    await prisma.articulo.delete({
-      where: { id_articulo: Number(id) }
-    });
-    res.redirect('/productos');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al eliminar el producto');
-  }
+export const activarProducto = async (req, res) => {
+  await prisma.articulo.update({
+    where: { id_articulo: parseInt(req.params.id) },
+    data: { activo: true }
+  });
+  res.redirect('/productos');
+};
+
+export const desactivarProducto = async (req, res) => {
+  await prisma.articulo.update({
+    where: { id_articulo: parseInt(req.params.id) },
+    data: { activo: false }
+  });
+  res.redirect('/productos');
 };

@@ -50,10 +50,23 @@
                                                         onclick="abrirModalEditarCategoria(<%= cat.id_categoria_articulo %>)">
                                                         <i class="bi bi-pencil-square"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-outline-danger" title="Eliminar"
-                                                        onclick="abrirModalEliminarCategoria(<%= cat.id_categoria_articulo %>)">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
+                                                    <% if (cat.activa) { %>
+                                                      <button
+                                                        class="btn btn-sm btn-neopos-desactivar"
+                                                        title="Desactivar"
+                                                        onclick="cambiarEstadoCategoria(<%= cat.id_categoria_articulo %>, false, '<%= cat.nombre %>')"
+                                                      >
+                                                        <i class="bi bi-eye-slash"></i> Desactivar
+                                                      </button>
+                                                    <% } else { %>
+                                                      <button
+                                                        class="btn btn-sm btn-neopos-activar"
+                                                        title="Activar"
+                                                        onclick="cambiarEstadoCategoria(<%= cat.id_categoria_articulo %>, true, '<%= cat.nombre %>')"
+                                                      >
+                                                        <i class="bi bi-eye"></i> Activar
+                                                      </button>
+                                                    <% } %>
                                                 </td>
                                             </tr>
                                         <% }); %>
@@ -139,27 +152,23 @@
                     </div>
                 </div>
 
-                <!-- Modal Eliminar Categoría -->
-                <div class="modal fade" id="modalEliminarCategoria" tabindex="-1" aria-labelledby="modalEliminarCategoriaLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form id="formEliminarCategoria" method="POST">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalEliminarCategoriaLabel">Eliminar Categoría</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="eliminar_id_categoria" name="id_categoria_articulo">
-                                    <p>¿Estás seguro que deseas eliminar la categoría <strong id="eliminar_nombre_categoria"></strong>?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                </div>
-                            </form>
-                        </div>
+                <!-- Modal Confirmar Activar/Desactivar Categoría -->
+                <div class="modal fade" id="modalConfirmarEstadoCategoria" tabindex="-1" aria-labelledby="modalConfirmarEstadoCategoriaLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalConfirmarEstadoCategoriaLabel">Confirmar acción</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                      </div>
+                      <div class="modal-body" id="textoConfirmarEstadoCategoria"></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="btnConfirmarEstadoCategoria">Aceptar</button>
+                      </div>
                     </div>
+                  </div>
                 </div>
+                <form id="formCambiarEstadoCategoria" method="POST" style="display: none"></form>
             </div>
         </div>
     <%- include('partials/_scripts') %>
