@@ -64,9 +64,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const logoutButton = document.getElementById("logoutButton");
     const confirmLogoutBtn = document.getElementById("confirmLogout");
     
-    console.log("Logout button:", logoutButton); // Para debugging
-    console.log("Confirm button:", confirmLogoutBtn); // Para debugging
-    
     if (logoutButton) {
         logoutButton.addEventListener("click", function(e) {
             e.preventDefault();

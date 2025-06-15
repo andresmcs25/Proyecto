@@ -16,7 +16,7 @@
                                 <h1 class="h3"> <%= pageTitle ? pageTitle.split(' - ')[0] : ' Usuarios' %></h1>
                                     <!-- Botón para abrir el modal -->
                                     <button type="button" class="btn btn-sm btn-neo-agregar" data-bs-toggle="modal" data-bs-target="#modalRegiTercero">
-                                        <i class="bi bi-plus-circle me-1"></i>Registrar Tercero
+                                        <i class="bi bi-plus-circle me-1"></i>Registrar Cliente
                                     </button>
                             </div>
                             <div class="modal fade" id="modalRegiTercero" tabindex="-1" aria-labelledby="modalRegiTerceroLabel" aria-hidden="true">
@@ -27,20 +27,8 @@
                                                 <h5 class="modal-title" id="modalRegiTerceroLabel">Registro Tercero</h5>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="mb-2">
-                                                    <label for="tipo_tercero" class="form-label">Tipo Tercero</label>
-                                                    <select class="form-select" id="tipo_tercero" name="tipo_tercero" required>
-                                                        <option value="">Seleccionar</option>
-                                                        <% if (typeof tiposTercero !== 'undefined' && tiposTercero.length > 0) { %>
-                                                            <% tiposTercero.forEach(tipo => { %>
-                                                                <option value="<%= tipo.tipo_tercero %>"><%= tipo.tipo_tercero %></option>
-                                                            <% }) %>
-                                                        <% } %>
-                                                        <div class="invalid-feedback">Este campo es obligatorio.</div>
-                                                    </select>
-                                                </div>
                                                 <div class="mb-3">
-                                                    <label for="nombre_razon_social" class="form-label">Nombre/Razón Social</label>
+                                                    <label for="nombre_razon_social" class="form-label">Nombre Cliente</label>
                                                     <input type="text" class="form-control" id="nombre_razon_social" name="nombre_razon_social" required>
                                                     <div class="invalid-feedback">Este campo es obligatorio.</div>
                                                 </div>
@@ -78,6 +66,55 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Modal para editar cliente -->
+                            <div class="modal fade" id="modalEditarTercero" tabindex="-1" aria-labelledby="modalEditarTerceroLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <form id="formEditarTercero">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalEditarTerceroLabel">Editar Cliente</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" id="edit_id_tercero" name="id_tercero">
+                                                <div class="mb-3">
+                                                    <label for="edit_nombre_razon_social" class="form-label">Nombre Cliente</label>
+                                                    <input type="text" class="form-control" id="edit_nombre_razon_social" name="nombre_razon_social" required>
+                                                    <div class="invalid-feedback">Este campo es obligatorio.</div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="edit_tipo_documento_identidad" class="form-label">Tipo Documento</label>
+                                                    <input class="form-control" id="edit_tipo_documento_identidad" name="tipo_documento_identidad" required>
+                                                    <div class="invalid-feedback">Este campo es obligatorio.</div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="edit_numero_documento_identidad" class="form-label">Número de Documento</label>
+                                                    <input type="text" class="form-control" id="edit_numero_documento_identidad" name="numero_documento_identidad" required>
+                                                    <div class="invalid-feedback">Este campo es obligatorio.</div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="edit_direccion" class="form-label">Dirección</label>
+                                                    <input type="text" class="form-control" id="edit_direccion" name="direccion" required>
+                                                    <div class="invalid-feedback">Este campo es obligatorio.</div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="edit_telefono_contacto" class="form-label">Teléfono</label>
+                                                    <input type="text" class="form-control" id="edit_telefono_contacto" name="telefono_contacto" required>
+                                                    <div class="invalid-feedback">Este campo es obligatorio.</div>
+                                                </div>   
+                                                <div class="mb-3">
+                                                    <label for="edit_email" class="form-label">Correo Electrónico</label>
+                                                    <input type="email" class="form-control" id="edit_email" name="email" required>
+                                                    <div class="invalid-feedback">Este campo es obligatorio.</div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-neo-agregar btn-sm">Actualizar</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="card shadow-sm">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center mb-3">
@@ -89,8 +126,7 @@
                                             <thead>
                                                 <tr class="text-center">
                                                     <th>ID</th>
-                                                    <th>Tipo Tercero</th>
-                                                    <th>Nombre/Razón Social</th>
+                                                    <th>Nombre Cliente</th>
                                                     <th>Tipo Documento</th>
                                                     <th>#Documento</th>
                                                     <th>Dirección</th>
@@ -98,13 +134,13 @@
                                                     <th>Correo Electronico</th>
                                                     <th>Fecha Registro</th>
                                                     <th>Estado</th>
+                                                    <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tabla-clientes">
                                             <% clientes.forEach(tercero=> { %>
                                                 <tr class="text-center">
                                                     <td><%= tercero.id_tercero %></td>
-                                                    <td><%= tercero.tipo_tercero %></td>
                                                     <td><%= tercero.nombre_razon_social %></td>
                                                     <td><%= tercero.tipo_documento_identidad %></td>
                                                     <td><%= tercero.numero_documento_identidad %></td>
@@ -112,9 +148,14 @@
                                                     <td><%= tercero.telefono_contacto %></td>
                                                     <td><%= tercero.email %></td>
                                                     <td><%= tercero.fecha_registro %></td>
-                                                    <td><button class="btn btn-sm <%= tercero.activo ? 'btn-success' : 'btn-danger' %>"
+                                                    <td><button class="btn btn-sm <%= tercero.activo ? 'btn-neo-agregar' : 'btn-danger' %>"
                                                                 onclick="toggleActivo(this, <%= tercero.id_tercero %>, <%= tercero.activo %>)">
                                                                 <i id="icono-<%= tercero.id_tercero %>" class="<%= tercero.activo ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill' %>"></i></button></td>
+                                                    <td> <button class="btn btn-sm btn-outline-primary me-1" 
+                                                                onclick="abrirModalEditar(<%= tercero.id_tercero %>, '<%= tercero.nombre_razon_social %>', '<%= tercero.tipo_documento_identidad %>', '<%= tercero.numero_documento_identidad %>', '<%= tercero.direccion %>', '<%= tercero.telefono_contacto %>', '<%= tercero.email %>')">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             <% }); %>
                                             </tbody>

@@ -8,7 +8,7 @@ async function toggleActivo(button, userId, currentState) {
 
         if (response.ok) {
             const newState = !currentState;
-            button.className = newState ? "btn btn-sm btn-success" : "btn btn-sm btn-danger";
+            button.className = newState ? "btn btn-sm btn-neo-agregar" : "btn btn-sm btn-danger";
             const icono = button.querySelector("i");
             if (icono) {
                 icono.className = newState ? "bi bi-check-circle-fill" : "bi bi-x-circle-fill";

@@ -122,7 +122,7 @@
                                                                 : 'Nunca' %>
                                                         </td>
                                                         <td><%= usuario.rol_usuario.nombre_rol %></td>
-                                                        <td><button class="btn btn-sm <%= usuario.activo ? 'btn-success' : 'btn-danger' %>"
+                                                        <td><button class="btn btn-sm <%= usuario.activo ? 'btn-neo-agregar' : 'btn-danger' %>"
                                                                onclick="toggleActivo(this, <%= usuario.id_usuario %>, <%= usuario.activo %>)">
                                                             <i id="icono-<%= usuario.id_usuario %>" class="<%= usuario.activo ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill' %>"></i></button></td>
                                                         <td class="acciones-tabla"> 

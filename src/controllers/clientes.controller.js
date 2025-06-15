@@ -27,7 +27,9 @@ export const renderClientes = async (req, res) => {
             id_rol_usuario: userFound.id_rol_usuario
         };
 
-        const clientes = await prisma.tercero.findMany();
+        const clientes = await prisma.tercero.findMany({
+            where: { tipo_tercero: "Cliente"}
+        });
 
         clientes.forEach(cliente => {
             cliente.fecha_registro = moment(cliente.fecha_registro).format("DD/MM/YYYY HH:mm");
@@ -70,7 +72,6 @@ export const toggleTerceroActivo = async (req, res) => {
 export const crearTercero = async (req, res) => {
     try {
         const {
-            tipo_tercero,
             nombre_razon_social,
             tipo_documento_identidad,
             numero_documento_identidad,
@@ -79,7 +80,7 @@ export const crearTercero = async (req, res) => {
             email
         } = req.body;
 
-        if (!tipo_tercero || !nombre_razon_social || !tipo_documento_identidad || !numero_documento_identidad || !direccion || !telefono_contacto || !email) {
+        if (!nombre_razon_social || !tipo_documento_identidad || !numero_documento_identidad || !direccion || !telefono_contacto || !email) {
             return res.status(400).json({
                 success: false,
                 message: "Faltan campos obligatorios"
@@ -99,7 +100,7 @@ export const crearTercero = async (req, res) => {
 
         const nuevoTercero = await prisma.tercero.create({
             data: {
-                tipo_tercero,
+                tipo_tercero: "Cliente",
                 nombre_razon_social,
                 tipo_documento_identidad,
                 numero_documento_identidad,
@@ -130,3 +131,83 @@ export const crearTercero = async (req, res) => {
         });
     }
 }
+export const editarTercero = async (req, res) => {
+    const { clienteId } = req.params;
+    
+    try {
+        const {
+            nombre_razon_social,
+            tipo_documento_identidad,
+            numero_documento_identidad,
+            direccion,
+            telefono_contacto,
+            email
+        } = req.body;
+
+        // Validar campos obligatorios
+        if (!nombre_razon_social || !tipo_documento_identidad || !numero_documento_identidad || !direccion || !telefono_contacto || !email) {
+            return res.status(400).json({
+                success: false,
+                message: "Faltan campos obligatorios"
+            });
+        }
+
+        // Verificar si el número de documento ya existe en otro cliente
+        const existingTercero = await prisma.tercero.findFirst({
+            where: { 
+                numero_documento_identidad: numero_documento_identidad,
+                id_tercero: { not: parseInt(clienteId) } // Excluir el cliente actual
+            }
+        });
+
+        if (existingTercero) {
+            return res.status(400).json({
+                success: false,
+                message: "El número de documento ya está registrado en otro cliente"
+            });
+        }
+
+        // Actualizar el cliente
+        const terceroActualizado = await prisma.tercero.update({
+            where: { 
+                id_tercero: parseInt(clienteId),
+                tipo_tercero: "Cliente" // Asegurar que solo se actualicen clientes
+            },
+            data: {
+                nombre_razon_social,
+                tipo_documento_identidad,
+                numero_documento_identidad,
+                direccion,
+                telefono_contacto,
+                email
+            }
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Cliente actualizado exitosamente",
+            tercero: terceroActualizado
+        });
+    } catch (error) {
+        console.error("Error al actualizar el cliente:", error);
+
+        if (error.code === 'P2002') {
+            return res.status(400).json({
+                success: false,
+                message: "El número de documento ya está registrado"
+            });
+        }
+
+        if (error.code === 'P2025') {
+            return res.status(404).json({
+                success: false,
+                message: "Cliente no encontrado"
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: "Error interno del servidor: " + error.message
+        });
+    }
+};
