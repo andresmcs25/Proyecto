@@ -20,6 +20,7 @@ export const renderProveedores = async (req, res) => {
             direccion: true,                
             telefono_contacto: true,
             email: true,
+            activo: true
         }
     });
 
@@ -89,15 +90,18 @@ export const editarProveedor = async (req, res) => {
     }
 };
 
-export const eliminarProveedor = async (req, res) => {
-    const { id } = req.params;
-    try {
-        await prisma.tercero.delete({
-            where: { id_tercero: parseInt(id) }
-        });
-        res.redirect("/proveedores");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error al eliminar proveedor");
-    }
+export const activarProveedor = async (req, res) => {
+  await prisma.tercero.update({
+    where: { id_tercero: parseInt(req.params.id) },
+    data: { activo: true }
+  });
+  res.redirect('/proveedores');
+};
+
+export const desactivarProveedor = async (req, res) => {
+  await prisma.tercero.update({
+    where: { id_tercero: parseInt(req.params.id) },
+    data: { activo: false }
+  });
+  res.redirect('/proveedores');
 };

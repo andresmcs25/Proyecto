@@ -194,13 +194,6 @@ model metodo_pago {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model permiso_sistema {
-  id_permiso_sistema  Int     @id @default(autoincrement())
-  nombre_permiso      String  @unique(map: "uq_permiso_nombre") @db.VarChar(100)
-  descripcion_permiso String? @db.VarChar(255)
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model rol_usuario {
   id_rol_usuario Int       @id @default(autoincrement())
   nombre_rol     String    @unique(map: "uq_rol_nombre") @db.VarChar(50)

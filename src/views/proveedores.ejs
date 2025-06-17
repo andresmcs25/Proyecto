@@ -24,7 +24,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nombre/Razón Social</th>
-                                        <th>Tipo Doc.</th> <!-- Nueva columna -->
+                                        <th>Tipo Doc.</th> 
                                         <th>Documento</th>
                                         <th>Teléfono</th>
                                         <th>Email</th>
@@ -37,19 +37,37 @@
                                             <tr>
                                                 <td><%= index + 1 %></td>
                                                 <td><%= prov.nombre_razon_social %></td>
-                                                <td><%= prov.tipo_documento_identidad %></td> <!-- Mostrar tipo de documento -->
+                                                <td><%= prov.tipo_documento_identidad %></td> 
                                                 <td><%= prov.numero_documento_identidad %></td>
                                                 <td><%= prov.telefono_contacto %></td>
                                                 <td><%= prov.email %></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-outline-primary me-1" title="Editar"
-                                                        onclick="abrirModalEditarProveedor(<%= prov.id_tercero %>)">
-                                                        <i class="bi bi-pencil-square"></i>
+                                                <td class="text-center">
+                                                <!-- Botón Editar -->
+                                                <button class="btn btn-sm btn-outline-primary me-1" title="Editar"
+                                                    data-id="<%= prov.id_tercero %>"
+                                                    onclick="abrirModalEditarProveedor(<%= prov.id_tercero %>)">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </button>
+
+                                                <% if (Number(prov.activo) === 1) { %>
+                                                    <!-- Botón Desactivar -->
+                                                    <button class="btn btn-sm btn-neopos-desactivar" title="Desactivar"
+                                                        data-id="<%= prov.id_tercero %>"
+                                                        data-accion="false"
+                                                        data-nombre="<%- prov.nombre_razon_social.replace(/"/g, '&quot;') %>"
+                                                        onclick="cambiarEstadoProveedorDesdeBoton(this)">
+                                                        <i class="bi bi-eye-slash"></i> Desactivar
                                                     </button>
-                                                    <button class="btn btn-sm btn-outline-danger" title="Eliminar"
-                                                        onclick="abrirModalEliminarProveedor(<%= prov.id_tercero %>)">
-                                                        <i class="bi bi-trash"></i>
+                                                <% } else { %>
+                                                    <!-- Botón Activar -->
+                                                    <button class="btn btn-sm btn-neopos-activar" title="Activar"
+                                                        data-id="<%= prov.id_tercero %>"
+                                                        data-accion="true"
+                                                        data-nombre="<%- prov.nombre_razon_social.replace(/"/g, '&quot;') %>"
+                                                        onclick="cambiarEstadoProveedorDesdeBoton(this)">
+                                                        <i class="bi bi-eye"></i> Activar
                                                     </button>
+                                                <% } %>
                                                 </td>
                                             </tr>
                                         <% }); %>
@@ -170,57 +188,26 @@
         </div>
     </div>
 
-    <!-- Modal Eliminar Proveedor -->
-    <div class="modal fade" id="modalEliminarProveedor" tabindex="-1" aria-labelledby="modalEliminarProveedorLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="formEliminarProveedor" method="POST">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalEliminarProveedorLabel">Eliminar Proveedor</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" id="eliminar_id_tercero" name="id_tercero">
-                        <p>¿Estás seguro que deseas eliminar el proveedor <strong id="eliminar_nombre_razon_social"></strong>?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    </div>
-                </form>
-            </div>
+    <!-- Modal Confirmar Estado Proveedor -->
+    <div class="modal fade" id="modalConfirmarEstadoProveedor" tabindex="-1" aria-labelledby="modalConfirmarEstadoProveedorLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalConfirmarEstadoProveedorLabel">Confirmar acción</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body" id="textoConfirmarEstadoProveedor"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="btnConfirmarEstadoProveedor">Aceptar</button>
+          </div>
         </div>
+      </div>
     </div>
-
-    <script>
-        // Exponer los proveedores en JS
-        window.proveedoresData = <%- JSON.stringify(proveedores) %>;
-
-        function abrirModalEditarProveedor(id) {
-            const prov = window.proveedoresData.find(p => p.id_tercero === id);
-            if (!prov) return;
-            document.getElementById('editar_id_tercero').value = prov.id_tercero;
-            document.getElementById('editar_nombre_razon_social').value = prov.nombre_razon_social;
-            document.getElementById('editar_tipo_documento_identidad').value = prov.tipo_documento_identidad || '';
-            document.getElementById('editar_numero_documento_identidad').value = prov.numero_documento_identidad;
-            document.getElementById('editar_direccion').value = prov.direccion || '';
-            document.getElementById('editar_telefono_contacto').value = prov.telefono_contacto || '';
-            document.getElementById('editar_email').value = prov.email || '';
-            document.getElementById('formEditarProveedor').action = `/proveedores/editar/${prov.id_tercero}`;
-            var modal = new bootstrap.Modal(document.getElementById('modalEditarProveedor'));
-            modal.show();
-        }
-
-        function abrirModalEliminarProveedor(id) {
-            const prov = window.proveedoresData.find(p => p.id_tercero === id);
-            if (!prov) return;
-            document.getElementById('eliminar_id_tercero').value = prov.id_tercero;
-            document.getElementById('eliminar_nombre_razon_social').textContent = prov.nombre_razon_social;
-            document.getElementById('formEliminarProveedor').action = `/proveedores/eliminar/${prov.id_tercero}`;
-            var modal = new bootstrap.Modal(document.getElementById('modalEliminarProveedor'));
-            modal.show();
-        }
-    </script>
+    <form id="formCambiarEstadoProveedor" method="POST" style="display: none"></form>
     <%- include('partials/_scripts') %>
+    <script>
+        window.proveedoresData = <%- JSON.stringify(proveedores) %>;
+    </script>
 </body>
 </html>

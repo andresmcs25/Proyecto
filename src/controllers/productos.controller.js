@@ -49,9 +49,9 @@ async function getUserData(req) {
 export const renderProductos = async (req, res) => {
   try {
     const articulos = await prisma.articulo.findMany({
-      where: {
-        activo: true 
-      },
+      // where: {
+      //   activo: true 
+      // },
       select: {
         id_articulo: true,
         nombre: true,
@@ -112,13 +112,16 @@ export const crearProducto = async (req, res) => {
     categoria
   } = req.body;
 
+  // Stock por defecto en 0
+  const stock = (typeof stock_actual === 'undefined' || stock_actual === '') ? 0 : Number(stock_actual);
+
   // Validaciones básicas
   let errores = [];
 
   if (!nombre || nombre.trim().length === 0) {
     errores.push('El campo nombre es obligatorio.');
   }
-  if (!stock_actual || isNaN(Number(stock_actual)) || Number(stock_actual) < 0) {
+  if (isNaN(stock) || stock < 0) {
     errores.push('El stock debe ser un número válido mayor o igual a 0.');
   }
   if (!precio_venta_neto || isNaN(Number(precio_venta_neto)) || Number(precio_venta_neto) < 0) {
@@ -132,7 +135,7 @@ export const crearProducto = async (req, res) => {
     const userData = await getUserData(req);
     const categorias = await prisma.categoria_articulo.findMany();
     const articulos = await prisma.articulo.findMany({
-      where: { activo: true },
+      // where: { activo: true },
       select: {
         id_articulo: true,
         nombre: true,
@@ -165,9 +168,9 @@ let nombreFormateado = nombre.split(' ').map(palabra => palabra.charAt(0).toUppe
   try {
     await prisma.articulo.create({
       data: {
-        nombre:nombreFormateado,
+        nombre,
         codigo_barra,
-        stock_actual: Number(stock_actual),
+        stock_actual: stock,
         precio_venta_neto: Number(precio_venta_neto),
         id_categoria_articulo: Number(categoria),
         activo: true
@@ -195,9 +198,6 @@ export const editarProducto = async (req, res) => {
   if (!nombre || nombre.trim().length === 0) {
     errores.push('El campo nombre es obligatorio.');
   }
-  if (!stock_actual || isNaN(Number(stock_actual)) || Number(stock_actual) < 0) {
-    errores.push('El stock debe ser un número válido mayor o igual a 0.');
-  }
   if (!precio_venta_neto || isNaN(Number(precio_venta_neto)) || Number(precio_venta_neto) < 0) {
     errores.push('El precio de venta debe ser un número válido mayor o igual a 0.');
   }
@@ -209,7 +209,7 @@ export const editarProducto = async (req, res) => {
     const userData = await getUserData(req);
     const categorias = await prisma.categoria_articulo.findMany();
     const articulos = await prisma.articulo.findMany({
-      where: { activo: true },
+      // where: { activo: true },
       select: {
         id_articulo: true,
         nombre: true,

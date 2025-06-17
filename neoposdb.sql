@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-05-2025 a las 19:44:34
+-- Tiempo de generación: 11-06-2025 a las 22:57:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `dbsistema_pos_v2`
+-- Base de datos: `neoposdb`
 --
 
 -- --------------------------------------------------------
@@ -52,8 +52,7 @@ INSERT INTO `articulo` (`id_articulo`, `id_categoria_articulo`, `id_unidad_medid
 (3, 3, 2, 'PK-GAL-OR01', 'Paquete Galletas Oreo x12', 100.00, 'Paquete de 12 unidades de galletas Oreo Clásicas', 'galletas_oreo.png', 1.50, 2.50, 1, 1),
 (4, 4, 3, 'CJ-BOL-BIC01', 'Caja Bolígrafos BIC Cristal x50', 200.00, 'Caja con 50 bolígrafos BIC Cristal, tinta azul', 'bic_cristal_caja.png', 8.00, 12.50, 1, 1),
 (5, 5, 1, 'LIM-FAB-LAV1L', 'Limpiador Fabuloso Lavanda 1L', 75.00, 'Limpiador multiusos líquido con aroma a lavanda, botella 1L', 'fabuloso_lavanda.png', 2.20, 3.80, 1, 1),
-(6, 1, 1, 'ACC-CAB-USBC1M', 'Cable USB-C 1 metro', 150.00, 'Cable de carga y datos USB-C a USB-A, 1 metro, color negro', 'cable_usbc.png', 3.00, 7.00, 1, 1),
-(7, 6, 1, 'BEB-COKE-600ML', 'Coca-Cola PET 600ml', 250.00, 'Gaseosa Coca-Cola Original en botella PET de 600ml', 'cocacola_600ml.png', 0.80, 1.50, 1, 1);
+(6, 2, 1, 'ACC-CAB-USBC1M', 'Cable USB-C 1 Metro', 150.00, 'Cable de carga y datos USB-C a USB-A, 1 metro, color negro', 'cable_usbc.png', 3.00, 7.00, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -247,31 +246,6 @@ INSERT INTO `metodo_pago` (`id_metodo_pago`, `nombre_metodo`, `requiere_referenc
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `permiso_sistema`
---
-
-CREATE TABLE `permiso_sistema` (
-  `id_permiso_sistema` int(11) NOT NULL,
-  `nombre_permiso` varchar(100) NOT NULL COMMENT 'Ej: acceder_ventas, crear_usuarios',
-  `descripcion_permiso` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Permisos detallados del sistema';
-
---
--- Volcado de datos para la tabla `permiso_sistema`
---
-
-INSERT INTO `permiso_sistema` (`id_permiso_sistema`, `nombre_permiso`, `descripcion_permiso`) VALUES
-(1, 'ACCESO_TOTAL_CONFIGURACION', 'Acceso completo a la configuración del sistema'),
-(2, 'GESTIONAR_USUARIOS_ROLES', 'Crear, editar, eliminar usuarios y roles'),
-(3, 'REALIZAR_VENTAS', 'Registrar y procesar ventas, emitir comprobantes'),
-(4, 'GESTIONAR_INVENTARIO', 'Controlar stock, categorías, artículos, realizar ajustes'),
-(5, 'REGISTRAR_COMPRAS', 'Registrar compras a proveedores y notas de entrada'),
-(6, 'VER_REPORTES_GENERALES', 'Acceder a reportes de ventas, compras, inventario'),
-(7, 'REALIZAR_APERTURA_CIERRE_CAJA', 'Abrir y cerrar sesiones de caja, realizar arqueos');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `rol_usuario`
 --
 
@@ -315,8 +289,9 @@ CREATE TABLE `tercero` (
 INSERT INTO `tercero` (`id_tercero`, `tipo_tercero`, `nombre_razon_social`, `tipo_documento_identidad`, `numero_documento_identidad`, `direccion`, `telefono_contacto`, `email`, `fecha_registro`, `activo`) VALUES
 (1, 'Cliente', 'Juan Carlos Pérez', 'CC', '1022345678', 'Calle 100 # 20-30', '3101234567', 'juan.perez@email.com', '2025-05-27 22:06:52', 1),
 (2, 'Cliente', 'Ana María López (Consumidor Final)', 'CC', '1022987654', 'Avenida Siempre Viva 742', '3159876543', 'ana.lopez@email.com', '2025-05-27 22:06:52', 1),
-(3, 'Proveedor', 'ElectroTech S.A.S.', 'NIT', '900123456-7', 'Zona Industrial Montevideo Bodega 5', '6013456789', 'ventas@electrotech.com.co', '2025-05-27 22:06:52', 1),
-(4, 'Proveedor', 'Distribuidora Alimentos ABC Ltda.', 'NIT', '800987654-3', 'Carrera 50 # 10-20', '6017654321', 'pedidos@distriabc.com', '2025-05-27 22:06:52', 1);
+(3, 'Proveedor', 'ElectroTech ', 'RUT', '900123456-6', 'Zona Industrial Montevideo Bodega 5', '6017845026', 'ventas@electrotech.com.co', '2025-05-27 22:06:52', 1),
+(4, 'Proveedor', 'Distribuidora Alimentos ABC Ltda.', 'NIT', '800987654-3', 'Carrera 50 # 10-20', '6017654321', 'pedidos@distriabc.com', '2025-05-27 22:06:52', 1),
+(6, 'Proveedor', 'Distriabastos LTDA', 'NIT', '800123456-7', 'Calle 10 # 15-20', '3001234567', 'distriabastos@gmail.com', '2025-06-09 08:56:52', 1);
 
 -- --------------------------------------------------------
 
@@ -370,10 +345,12 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id_usuario`, `id_rol_usuario`, `nombre_completo`, `tipo_documento_identidad`, `numero_documento_identidad`, `telefono`, `email`, `cargo_descripcion`, `login_acceso`, `password_hash`, `ruta_avatar`, `fecha_creacion`, `ultimo_acceso`, `activo`) VALUES
-(1, 1, 'Administrador Principal', NULL, NULL, NULL, 'admin@neosystem.com', NULL, 'admin', '$2y$10$K9jHb3oX2s5N7M4L0PqRSOeXoY0U8z2kL9W4o7J3E6D5C3B2A1a.', NULL, '2025-05-27 22:06:52', NULL, 1),
-(2, 2, 'Maria García (Cajera)', NULL, NULL, NULL, 'maria.garcia@neosystem.com', NULL, 'cajero1', '$2y$10$A1b2C3d4E5f6G7h8I9j0Ku8i7h6g5f4e3d2c1b0a9Z8Y7X6.', NULL, '2025-05-27 22:06:52', NULL, 1),
-(3, 3, 'Carlos Ruiz (Bodega)', NULL, NULL, NULL, 'carlos.ruiz@neosystem.com', NULL, 'bodega1', '$2y$10$Z9y8X7w6V5u4T3s2R1q0Po.P0o9N8m7L6k5J4i3H2g1F0e.', NULL, '2025-05-27 22:06:52', NULL, 1),
-(4, 1, 'Jose Luis Piñeros', 'Cedula Ciudadania', '1000163533', '3152185937', 'devjose@gmail.com', NULL, '', '12345678', NULL, '2025-05-28 19:42:03', NULL, 1);
+(1, 1, 'Administrador Principal', NULL, NULL, NULL, 'admin@neosystem.com', NULL, 'admin', '$2b$10$clIQUsB4V4yo/YHXacIxWuDRmvdYbjVZIh0yWW9814iEugD5fQHom', NULL, '2025-05-27 22:06:52', NULL, 1),
+(2, 2, 'Maria García (Cajera)', NULL, NULL, NULL, 'maria.garcia@neosystem.com', NULL, 'cajero1', '$2b$10$yoSMIwtTN8CTPDWdlt8Awetbdbn.u.daZZvg4OzOkSBxM4oHUws9O', NULL, '2025-05-27 22:06:52', NULL, 1),
+(3, 3, 'Carlos Ruiz (Bodega)', NULL, NULL, NULL, 'carlos.ruiz@neosystem.com', NULL, 'bodega1', '$2b$10$86tBVeB/8l.4G6VzjHZhyuHsM/ytbAsHmerSpYZknr6jbKgh0/TPe', NULL, '2025-05-27 22:06:52', NULL, 1),
+(4, 1, 'Jose Luis Piñeros', 'Cedula Ciudadania', '1000163533', '3152185937', 'devjose@gmail.com', NULL, '', '$2b$10$x8jsRwn4fH7sHCkJ/5aq5ecu2iAEBXbXpi66rJNij5WpHKJy2.ZtG', NULL, '2025-05-28 19:42:03', '2025-06-11 17:34:59', 1),
+(8, 1, 'Andrés de Jesús Mejía Contreras', 'CC', '1083016546', '3187189335', 'amejia@neosystem.com', 'Administrador', 'admin1', '$2b$12$ohh5j8A91aaezMBcJOKUjO2omjh3qPo1nzKlAkHCT47VaBTMaVJyS', NULL, '2025-06-09 01:37:11', '2025-06-09 03:56:29', 1),
+(10, 2, 'cajero prubas 01', 'cedula ciudadania', '222222222222222', '3132801187', 'cajero@gmail.com', 'cajero principal', 'cajero', '$2b$12$1DzbqT16xYu37gl5ldrG0.QtIjP640ygZuCDtk1c6U25QkXgWT776', NULL, '2025-06-11 03:38:45', '2025-06-11 15:41:49', 1);
 
 -- --------------------------------------------------------
 
@@ -502,13 +479,6 @@ ALTER TABLE `metodo_pago`
   ADD UNIQUE KEY `uq_metodo_pago_nombre` (`nombre_metodo`);
 
 --
--- Indices de la tabla `permiso_sistema`
---
-ALTER TABLE `permiso_sistema`
-  ADD PRIMARY KEY (`id_permiso_sistema`),
-  ADD UNIQUE KEY `uq_permiso_nombre` (`nombre_permiso`);
-
---
 -- Indices de la tabla `rol_usuario`
 --
 ALTER TABLE `rol_usuario`
@@ -585,7 +555,7 @@ ALTER TABLE `caja_sesion`
 -- AUTO_INCREMENT de la tabla `categoria_articulo`
 --
 ALTER TABLE `categoria_articulo`
-  MODIFY `id_categoria_articulo` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID único de la categoría', AUTO_INCREMENT=7;
+  MODIFY `id_categoria_articulo` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID único de la categoría', AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `compra`
@@ -612,12 +582,6 @@ ALTER TABLE `metodo_pago`
   MODIFY `id_metodo_pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT de la tabla `permiso_sistema`
---
-ALTER TABLE `permiso_sistema`
-  MODIFY `id_permiso_sistema` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
 -- AUTO_INCREMENT de la tabla `rol_usuario`
 --
 ALTER TABLE `rol_usuario`
@@ -627,7 +591,7 @@ ALTER TABLE `rol_usuario`
 -- AUTO_INCREMENT de la tabla `tercero`
 --
 ALTER TABLE `tercero`
-  MODIFY `id_tercero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_tercero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `unidad_medida`
@@ -639,7 +603,7 @@ ALTER TABLE `unidad_medida`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `venta`
